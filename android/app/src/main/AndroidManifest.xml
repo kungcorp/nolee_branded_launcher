@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- Wi-Fi scan results and Bluetooth discovery are empty on API 28 without location. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- Ask AI voice commands (offline Vosk). In kiosk, grant it over adb: Android's prompt may be blocked. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Vitals. The watch's heart-rate sensor is declared with BODY_SENSORS: without it SensorService refuses to
+         enable the sensor and measuring silently never gets a reading. -->
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <!-- System brightness (appops WRITE_SETTINGS) and the vitals measurement mode (pm grant). -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions" />
+
+    <queries>
+        <package android:name="ai.nolee.camera" />
+        <package android:name="ai.nolee.files" />
+        <package android:name="ai.nolee.gallery" />
+        <package android:name="ai.nolee.phone" />
+        <package android:name="ai.nolee.sms" />
+        <provider android:authorities="io.kungcorp.nolee.launcher.state" />
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:label="Nolee Custom Launcher"
+        android:theme="@style/Theme.CustomLauncher">
+
+        <!-- Portrait until the landscape layout is ported. HOME is required before the Nolee Launcher
+             accepts this as the kiosk primary app. -->
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden|navigation|uiMode|fontScale|density"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

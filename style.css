@@ -1,0 +1,222 @@
+@font-face{font-family:Spline;src:url('assets/spline.ttf')}*{box-sizing:border-box}body{margin:0;background:#131615;color:#f0f2ef;font-family:Spline,monospace}button,input,select{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #83f5d0;outline-offset:3px}header{padding:38px 4vw 30px;border-bottom:1px solid #343a37;display:flex;justify-content:space-between;align-items:center}.eyebrow,.edition{font-size:10px;letter-spacing:1.5px;color:#a3ada6}.edition{line-height:2;text-align:right}h1{font-size:36px;font-weight:400;letter-spacing:-2px;margin:14px 0 10px}header p{font-size:12px;color:#a3ada6}main{max-width:1500px;margin:auto;display:grid;grid-template-columns:minmax(210px,1fr) auto minmax(220px,1fr);gap:48px;padding:55px 4vw 65px}aside{max-width:270px;padding-top:18px}h2{font-size:28px;font-weight:400;line-height:1.4;letter-spacing:-1px}aside p{font-size:12px;line-height:1.9;color:#a3ada6}h3{font-size:19px;font-weight:400;margin:22px 0}.orient{display:flex;flex-direction:column;gap:8px;margin:30px 0}.orient button{background:transparent;border:1px solid #414b44;text-align:left;padding:13px;font-size:11px}.orient button[aria-pressed=true]{color:#83f5d0;border-color:#83f5d0;background:#83f5d009}.name-label{font-size:10px;letter-spacing:1px;color:#a3ada6;display:block}#owner{display:block;width:100%;padding:12px;margin-top:10px;color:white;background:#0a0d0b;border:1px solid #414b44}.hint{font-size:10px!important;margin-top:24px}.prototype-tag{display:block;font-size:9px;color:#83f5d0;margin-top:25px;line-height:1.8}.stage{align-self:start}.device{width:410px;height:502px;position:relative;background:#030504;overflow:hidden;border-radius:110px;isolation:isolate;box-shadow:0 0 0 9px #080a09,0 0 0 10px #353c37}.grid{position:absolute;top:0;right:0;bottom:0;left:0;background-image:linear-gradient(#ffffff06 1px,transparent 1px),linear-gradient(90deg,#ffffff06 1px,transparent 1px);background-size:34px 34px;z-index:-2}.peace{position:absolute;left:0;top:50%;width:100%;height:auto;max-width:none;opacity:.21;transform:translateY(-50%) translate(15px,54px) scale(1) rotate(0deg);transform-origin:center;mix-blend-mode:screen;z-index:-1;pointer-events:none}.rim{position:absolute;top:6px;right:6px;bottom:6px;left:6px;border:1px solid #83f5d01c;border-radius:104px;pointer-events:none}.status{position:absolute;top:29px;left:65px;right:65px;display:flex;justify-content:space-between;font-size:12px;color:#aab1ac}.status b{color:#83f5d0;font-weight:400}#view{position:absolute;top:78px;right:39px;bottom:79px;left:39px;animation:enter .25s ease}.device-nav{position:absolute;bottom:26px;left:62px;right:62px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #3b443e;padding-top:4px}.device-nav button{background:none;border:0;height:44px;padding:0 5px;font-size:11px;color:#aab1ac}.device-nav button:last-child{color:#83f5d0}.tag{font-size:11px;letter-spacing:.5px;display:inline-block;background:#e6ece7;color:#080a09;padding:4px 7px}.greeting{margin:21px 0 7px;border-left:2px solid #83f5d0;padding-left:13px;font-size:26px;letter-spacing:-1.3px;font-weight:400;overflow-wrap:anywhere}.greeting b{font-weight:400}.cursor{display:inline-block;width:13px;height:25px;background:#83f5d0;vertical-align:-3px;animation:blink 1.2s steps(1) infinite}.sub{font-size:11px;color:#9ca79f;line-height:1.7}.app-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:22px}.app-button{height:74px;background:#080c0bc9;border:1px solid #47544c;display:flex;align-items:center;gap:12px;padding:13px;text-align:left}.app-button:hover{background:#83f5d015;border-color:#83f5d0}.app-button svg{width:25px;height:25px;stroke:#d7e6db;fill:none;stroke-width:1.5}.app-button strong{font-size:14px;font-weight:400}.app-button small{font-size:9px;color:#88978e;display:block;margin-top:5px}.session{font-size:10px;margin-top:16px;color:#83f5d0;display:flex;justify-content:space-between}.session span:last-child{color:#89978f}.dimension{display:flex;justify-content:space-between;font-size:9px;margin-top:28px;color:#acb6af;gap:10px}.dimension span{color:#738077}.contract{display:flex;gap:14px;border-top:1px solid #333e36;padding:18px 0 0;margin-top:18px}.contract>span{color:#83f5d0;font-size:11px;padding-top:3px}.contract strong{font-weight:400;font-size:12px}.contract p{font-size:11px;margin:6px 0 0}footer{padding:22px 4vw;border-top:1px solid #343a37;display:flex;justify-content:space-between;gap:15px;font-size:9px;color:#85918a}.page-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.page-title h2{margin:0;font-size:23px;line-height:1.2}.page-title span{font-size:9px;color:#83f5d0}.scroll{height:calc(100% - 45px);overflow:auto;scrollbar-width:thin;scrollbar-color:#52665b transparent;padding:2px}.row{width:100%;background:#070c09ed;border:0;border-bottom:1px solid #34483b;min-height:55px;display:flex;justify-content:space-between;align-items:center;text-align:left;padding:9px;font-size:13px;gap:8px}.row small{display:block;color:#87998c;font-size:10px;margin-top:5px}.row .value{color:#83f5d0;font-size:11px}.setting{background:#070c09ed;padding:13px 9px;border-bottom:1px solid #34483b;font-size:13px}.setting label{display:flex;justify-content:space-between;margin-bottom:12px}.setting output{color:#83f5d0}input[type=range]{width:100%;accent-color:#83f5d0}.toggle{border:1px solid #83f5d0;background:#83f5d019;font-size:11px;padding:8px;color:#83f5d0}select{background:#111b15;color:#eee;max-width:135px;border:1px solid #617d69;padding:6px}.notice{font-size:11px;line-height:1.8;color:#a4b5aa;padding:12px 3px}.camera{height:210px;background:#101912;position:relative;border:1px solid #536b5d;display:flex;align-items:center;justify-content:center}.camera:after{content:'';width:75px;height:75px;border:1px solid #83f5d0}.camera span{position:absolute;top:15px;left:14px;font-size:10px;color:#83f5d0}.capture{width:52px;height:52px;border-radius:50%;border:4px double #030504;background:#e8f7ec;display:block;margin:12px auto}.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.photo{height:110px;background:#14241b;border:1px solid #475c4e;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.photo img{width:100%;height:100%;object-fit:cover;opacity:.5}.photo span{position:absolute;bottom:7px;left:8px;font-size:10px}.dial{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.dial button{height:46px;border:1px solid #34483b;background:#09120c;font-size:20px}.number{height:37px;display:block;text-align:center;font-size:20px;color:#83f5d0;overflow:hidden}.call{width:100%;background:#83f5d0;border:0;color:#051309;padding:12px;margin-top:8px}.device.landscape{width:502px;height:410px}.landscape #view{top:68px;right:48px;bottom:69px;left:48px}.landscape .greeting{margin-top:15px;font-size:25px;max-width:200px}.landscape .app-grid{position:absolute;right:0;top:40px;width:190px;gap:7px;margin:0}.landscape .app-button{height:81px;display:block;padding:10px}.landscape .app-button svg{width:20px;height:20px;display:block;margin-bottom:6px}.landscape .app-button small{display:none}.landscape .session{position:absolute;bottom:5px;left:0;right:0}.landscape .home-sub{max-width:185px}.landscape .peace{transform:translateY(-50%) translate(26px,41px) scale(.68) rotate(18deg)}.landscape .status{left:80px;right:80px;top:25px}.landscape .device-nav{left:80px;right:80px;bottom:18px}.landscape .camera{height:150px}.landscape .capture{margin-top:5px;width:43px;height:43px}.landscape .dial button{height:32px}.landscape .number{height:28px}.landscape .call{padding:8px}.landscape .gallery-grid .photo{height:85px}@keyframes blink{50%{opacity:0}}@keyframes enter{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}@media(max-width:1150px){main{grid-template-columns:210px auto;justify-content:center;gap:35px}.detail{grid-column:1/-1;max-width:none;display:none}}@media(max-width:760px){main{display:flex;flex-direction:column;padding:28px 20px;align-items:center}aside{max-width:502px;width:100%;padding:0}aside h2,aside>p,aside .name-label,aside>.prototype-tag{display:none}.orient{flex-direction:row;margin:16px 0 4px}.stage{align-self:center;max-width:100%}.device{transform-origin:top left}header{padding:24px}header h1{font-size:28px}.edition{display:none}footer{flex-wrap:wrap}.dimension{font-size:8px}header p{line-height:1.8}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+/* Clip artwork without allowing focus to scroll the device surface. */
+.device{overflow:clip}
+
+/* Five-app rolling drum: the original body-button area, with all anchors unchanged. */
+.app-roller{position:relative;height:157px;margin-top:22px;display:flex;gap:8px;isolation:isolate}
+.roller-window{position:relative;flex:1;min-width:0;height:100%;overflow:hidden;overflow:clip;perspective:450px;touch-action:none;user-select:none}
+.selection-frame{position:absolute;top:calc(50% - 31px);right:0;bottom:auto;left:0;height:62px;border:1px solid #83f5d0;background:#83f5d00a;pointer-events:none}
+.selection-frame:before{content:'';position:absolute;top:23px;left:0;width:3px;height:14px;background:#83f5d0}
+.roller-app{position:absolute;top:calc(50% - 31px);left:7px;width:calc(100% - 14px);height:62px;display:flex;align-items:center;gap:16px;padding:10px 17px;border:0;background:#060b08e8;text-align:left;transform-origin:center;will-change:transform,opacity;backface-visibility:hidden}
+.roller-app svg{width:27px;height:27px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.5}
+.roller-app strong{font-size:17px;font-weight:400;letter-spacing:-.4px}
+.roller-app small{display:block;font-size:8px;letter-spacing:1px;color:#96ab9e;margin-top:5px}
+.roller-app.selected{color:#83f5d0;background:transparent}
+.roller-app:not(.selected) small,.roller-app:not(.selected) .launch-mark{visibility:hidden}
+.launch-mark{margin-left:auto;font-size:17px}
+.roller-rail{width:34px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;border-left:1px solid #34483b}
+.roller-rail button{width:34px;height:44px;background:transparent;border:0;color:#83f5d0;font-size:24px;line-height:1}
+.roll-count{font-size:8px;color:#9eafa5;writing-mode:vertical-rl;letter-spacing:1px}
+.landscape .app-roller{position:absolute;right:0;top:40px;width:190px;height:169px;margin:0;gap:3px}
+.landscape .roller-rail{width:26px}.landscape .roller-rail button{width:26px}
+.landscape .roller-app{gap:9px;padding:8px 4px}.landscape .roller-app svg{width:20px;height:20px}
+.landscape .roller-app strong{font-size:14px}.landscape .roller-app small{font-size:7px;letter-spacing:.5px}
+.landscape .launch-mark{font-size:12px}
+/* Landscape: the highlighted card rolls into the free area beneath the slogan. */
+.roller-connection{display:none}
+.landscape .roller-window{overflow:visible;perspective:none}
+.landscape .selection-frame{top:auto;right:auto;bottom:auto;left:auto;left:-216px;top:117.5px;width:210px;height:62px}
+.landscape .roller-connection{display:block;position:absolute;left:-216px;top:0;width:406px;height:169px;overflow:visible;pointer-events:none;fill:none;stroke:#83f5d064;stroke-width:1}
+.landscape .roller-connection circle{fill:#83f5d0;stroke:none}
+.landscape .roller-app.selected strong{font-size:18px}
+.landscape .roller-app.selected{padding-left:15px;padding-right:14px;gap:13px}
+.landscape .roller-app.selected svg{width:25px;height:25px}
+.landscape .roller-app.selected small{font-size:8px;letter-spacing:.8px}
+/* Peace / Time: live watch face, inside the existing device chrome. */
+.watch-face{height:100%;position:relative;font-variant-numeric:tabular-nums}
+.watch-heading{display:flex;justify-content:space-between;align-items:center}
+.watch-live{color:#83f5d0;font-size:9px;letter-spacing:1px}
+.watch-ring{position:absolute;top:36px;left:50%;transform:translateX(-50%);width:228px;height:228px;fill:none}
+.watch-ring .major{stroke:#adbbb0;stroke-width:1.3}.watch-ring .minor{stroke:#466152;stroke-width:1}
+.ring-track{stroke:#83f5d016;stroke-width:1}.ring-progress{stroke:#83f5d0;stroke-width:2;stroke-dasharray:0 60}.ring-cross{stroke:#83f5d04a;stroke-width:1}
+.watch-time{position:absolute;left:0;right:0;top:91px;text-align:center}
+.watch-kicker{font-size:9px;letter-spacing:1.5px;color:#a7baad}
+.watch-digits{display:block;font-size:67px;letter-spacing:-5px;line-height:1.25;color:#f1f7f3;text-shadow:0 2px 8px #030504;background:#030504b8}
+.watch-seconds{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:5px;color:#839b8b;font-size:8px;letter-spacing:1px}
+.watch-seconds-value{color:#83f5d0;font-size:17px;letter-spacing:0}.seconds-indicator{width:4px;height:4px;background:#83f5d0}
+.watch-date{position:absolute;bottom:37px;left:0;right:0;display:flex;justify-content:space-between;align-items:center;font-size:11px;gap:8px}
+.watch-day{color:#83f5d0;font-size:11px}.watch-date-value{color:#c2cec6;font-size:10px}
+.watch-zone{position:absolute;bottom:7px;left:0;right:0;display:flex;justify-content:space-between;border-top:1px solid #34483b;padding-top:10px;font-size:9px;color:#8da397;gap:12px}
+.watch-zone-value{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.landscape .watch-ring{width:155px;height:155px;left:auto;right:-2px;top:44px;transform:none}
+.landscape .watch-time{top:69px;right:auto;left:0;text-align:left;width:243px}
+.landscape .watch-digits{font-size:70px;letter-spacing:-5px;background:transparent}
+.landscape .watch-seconds{justify-content:flex-start;margin-top:3px}
+.landscape .watch-date{bottom:42px}.landscape .watch-zone{bottom:10px}
+
+/* More clearance between the portrait digits and their surrounding dial. */
+.device:not(.landscape) .watch-ring{width:290px;height:290px;top:12px}
+.device:not(.landscape) .watch-digits{width:max-content;margin-left:auto;margin-right:auto;padding-left:5px;padding-right:5px}
+.device:not(.landscape) .ring-cross{display:none}
+.watch-exit-layer{position:absolute!important;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:30;transform-origin:50% 45%}
+
+/* The peace artwork fades out while the watch face is open, and back in on exit. */
+.peace{transition:opacity .45s cubic-bezier(.22,1,.36,1)}
+.device.watch-mode .peace{opacity:0}
+@media(prefers-reduced-motion:reduce){.peace{transition:none}}
+/* Without the artwork's glow the base grid is nearly invisible, so the watch face brings in a brighter one. */
+.grid:after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;background-image:linear-gradient(#ffffff0d 1px,transparent 1px),linear-gradient(90deg,#ffffff0d 1px,transparent 1px);background-size:34px 34px;opacity:0;transition:opacity .45s cubic-bezier(.22,1,.36,1)}
+.device.watch-mode .grid:after{opacity:1}
+@media(prefers-reduced-motion:reduce){.grid:after{transition:none}}
+/* Home is the only nav control, so it takes the whole bottom of the display. */
+.device-nav{bottom:0;padding-top:0}
+.device-nav .home-bar{flex:1;height:74px;padding:0 0 26px;color:#aab1ac;transition:background .2s,color .2s}
+.device-nav .home-bar:hover,.device-nav .home-bar:active{background:#83f5d00d;color:#83f5d0}
+.landscape .device-nav{bottom:0}.landscape .device-nav .home-bar{height:66px;padding-bottom:18px}
+/* Home bar: white and larger so the whole bottom reads as one button; shorter so its line sits lower. */
+.device-nav .home-bar{height:64px;padding-bottom:20px;color:#fff;font-size:16px;letter-spacing:1.5px;display:flex;align-items:center;justify-content:center;gap:9px}
+.device-nav .home-bar:hover,.device-nav .home-bar:active{color:#fff}
+.home-icon{font-size:24px;line-height:1}
+.landscape .device-nav .home-bar{height:58px;padding-bottom:14px}
+/* Larger greeting and slogan on Home. */
+.home-greeting{font-size:31px}.home-sub{font-size:13px}
+.landscape .home-greeting{font-size:29px}
+.device .device-nav .home-bar{color:#fff}
+/* Portrait: pin the session line above the bar and tighten the stack so the larger greeting fits. */
+.device:not(.landscape) .home-greeting{margin-top:14px;line-height:1.15}
+.device:not(.landscape) .app-roller{margin-top:14px}
+.device:not(.landscape) .session{position:absolute;left:0;right:0;bottom:1px;margin:0}
+/* Landscape: keep the slogan on one line above the launch slot. */
+.landscape .home-sub{max-width:212px;white-space:nowrap}
+/* Peace entrance, ported from the Nolee website hero (public/index.html .gesture-*). */
+@property --reveal{syntax:"<percentage>";inherits:false;initial-value:100%}
+.peace-render{position:relative;animation:peace-float 5.8s ease-in-out 2.8s infinite}
+.peace-layer{display:block;width:100%;height:auto;mix-blend-mode:screen;-webkit-mask-image:linear-gradient(to top,#000 0%,#000 var(--reveal),transparent calc(var(--reveal) + 14%));mask-image:linear-gradient(to top,#000 0%,#000 var(--reveal),transparent calc(var(--reveal) + 14%))}
+.peace-art{position:relative;opacity:.96;filter:contrast(1.04) brightness(.98)}
+.peace-aura{position:absolute;top:0;right:0;bottom:0;left:0;opacity:.2;filter:blur(8px) contrast(1.06) sepia(.2) hue-rotate(105deg) saturate(1.35);transform:scale(1.012)}
+.peace-render:after{content:'';position:absolute;left:22%;top:58%;width:42%;height:0;padding-top:33.6%;border-radius:44%;background:radial-gradient(circle,#83f5d03d,#83f5d000 68%);mix-blend-mode:screen;opacity:.08}
+.peace-render.is-replaying .peace-art{animation:peace-raster-reveal 2.8s cubic-bezier(.42,0,.18,1) .06s both}
+.peace-render.is-replaying .peace-aura{animation:peace-aura-reveal 2.9s cubic-bezier(.42,0,.18,1) both,peace-aura-breathe 4.8s ease-in-out 3s infinite}
+.peace-render.is-replaying:after{animation:peace-screen-wake 3.8s ease-in-out 1.9s infinite}
+@keyframes peace-raster-reveal{0%{--reveal:-14%;opacity:0;transform:translateY(10px);filter:contrast(1.04) brightness(.98) blur(3px)}16%{opacity:.72}72%{opacity:.95}100%{--reveal:100%;opacity:.96;transform:translateY(0);filter:contrast(1.04) brightness(.98) blur(0)}}
+@keyframes peace-aura-reveal{0%{--reveal:-14%;opacity:0}45%{opacity:.14}100%{--reveal:100%;opacity:.28}}
+@keyframes peace-aura-breathe{50%{opacity:.14;transform:scale(1.025)}}
+@keyframes peace-float{50%{transform:translateY(-5px) rotate(-.18deg)}}
+@keyframes peace-screen-wake{0%,100%{opacity:.08;transform:scale(.88)}45%,62%{opacity:.48;transform:scale(1.08)}}
+/* ---- Home motion ---- */
+/* Staggered entrance each time Home is entered (class removed after it plays). */
+#view.home-entering>:not(.watch-exit-layer){animation:home-rise .62s cubic-bezier(.22,1,.36,1) both}
+#view.home-entering>:nth-child(1){animation-name:home-tag-wipe;animation-duration:.5s}
+#view.home-entering>:nth-child(2){animation-delay:.08s}
+#view.home-entering>:nth-child(3){animation-name:home-track;animation-delay:.2s;animation-duration:.9s}
+#view.home-entering>:nth-child(4){animation-delay:.28s}
+#view.home-entering>:nth-child(5){animation-delay:.4s}
+.device.home-entering .home-bar{animation:home-rise .55s cubic-bezier(.22,1,.36,1) .46s both}
+@keyframes home-rise{from{opacity:0;transform:translateY(10px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes home-tag-wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+@keyframes home-track{from{opacity:0;letter-spacing:.12em;filter:blur(3px)}to{opacity:1;letter-spacing:0;filter:none}}
+/* Typewriter greeting: fixed two-line box so fitting and erasing never shift the layout. */
+.device:not(.landscape) .home-greeting{height:72px}
+.landscape .home-greeting{line-height:1.15;height:67px;max-width:212px}
+.home-greeting .typed{white-space:pre-line}
+.home-greeting .cursor{width:.52em;height:.95em;vertical-align:-.1em;margin-left:.12em;animation:none}
+/* Selection frame: passing sheen and pulsing notch. */
+.selection-frame{overflow:hidden}
+.selection-frame:after{content:'';position:absolute;top:0;bottom:0;left:0;width:45%;background:linear-gradient(100deg,#83f5d000,#83f5d024 50%,#83f5d000);transform:translateX(-110%);animation:frame-sheen 4.6s cubic-bezier(.45,0,.2,1) 1.4s infinite}
+@keyframes frame-sheen{0%{transform:translateX(-110%)}38%,100%{transform:translateX(330%)}}
+.selection-frame:before{transform-origin:left center;animation:notch-pulse 2.4s ease-in-out infinite}
+@keyframes notch-pulse{50%{transform:scaleY(1.7);box-shadow:0 0 8px #83f5d0}}
+/* Selected app: breathing glow, nudging launch arrow, press and launch flash. */
+.roller-app{transition:background-color .2s}.roller-app>svg,.roller-app>span{transition:transform .18s cubic-bezier(.22,1,.36,1)}
+.roller-app.selected svg{filter:drop-shadow(0 0 5px #83f5d073);animation:icon-breathe 3.2s ease-in-out infinite}
+@keyframes icon-breathe{50%{filter:drop-shadow(0 0 1px #83f5d000)}}
+.roller-app.selected .launch-mark{display:inline-block;animation:launch-nudge 2.4s ease-in-out infinite}
+@keyframes launch-nudge{0%,60%,100%{transform:none}75%{transform:translate(3px,-3px)}}
+.roller-app.selected:active{background:#83f5d00f}.roller-app.selected:active>svg,.roller-app.selected:active>span:not(.launch-mark){transform:scale(.96)}
+.roller-app.launching{animation:launch-flash .18s ease-out both}
+@keyframes launch-flash{50%{background:#83f5d029}}
+/* Rail arrows: idle bob, glow and press. */
+.roller-rail button{position:relative;top:0;transition:transform .16s cubic-bezier(.22,1,.36,1),text-shadow .2s}
+.roller-rail button:hover{text-shadow:0 0 8px #83f5d0}
+.roller-rail button:active{transform:scale(.78)}
+.roll-prev{animation:rail-up 2.6s ease-in-out infinite}.roll-next{animation:rail-down 2.6s ease-in-out infinite}
+@keyframes rail-up{50%{top:-3px}}@keyframes rail-down{50%{top:3px}}
+.session-dot{font-style:normal;display:inline-block;animation:session-pulse 2.4s ease-in-out infinite}
+@keyframes session-pulse{50%{opacity:.35;text-shadow:0 0 6px #83f5d0}}
+/* Bottom bar: Voice Command on Home, with a mint sweep and shimmering label. */
+.device-nav{clip-path:inset(-2px 0 0 0)}
+.device.home-page .device-nav:before{content:'';position:absolute;top:-1px;left:0;width:34%;height:1px;background:linear-gradient(90deg,#83f5d000,#83f5d0,#83f5d000);opacity:0;animation:nav-sweep 5.2s ease-in-out 1s infinite}
+@keyframes nav-sweep{0%{transform:translateX(-100%);opacity:0}10%{opacity:1}45%,100%{transform:translateX(300%);opacity:0}}
+.home-bar>span{display:inline-block;transition:transform .16s cubic-bezier(.22,1,.36,1)}
+.home-bar:active>span{transform:scale(.92)}
+.ai-star{width:22px;height:22px}
+.ai-star svg,.ask-orb svg{display:block;width:100%;height:100%;fill:currentColor;animation:star-twinkle 3.4s ease-in-out infinite}
+@keyframes star-twinkle{0%,100%{transform:none}45%{transform:scale(1.15) rotate(12deg);filter:drop-shadow(0 0 6px #83f5d0)}}
+.home-bar[data-mode=ask] .home-label{background:linear-gradient(90deg,#fff 0 42%,#83f5d0 50%,#fff 58% 100%);background-size:300% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent;animation:label-shimmer 4.6s ease-in-out 1.2s infinite}
+@keyframes label-shimmer{0%{background-position:100% 0}45%,100%{background-position:0 0}}
+/* Voice Command preview screen. */
+.ask-ai{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding-top:8px}
+.ask-orb{width:60px;height:60px;flex-shrink:0;padding:15px;border:1px solid #83f5d066;border-radius:50%;color:#83f5d0;position:relative;animation:orb-breathe 2.8s ease-in-out infinite}
+.ask-orb:after{content:'';position:absolute;top:-1px;right:-1px;bottom:-1px;left:-1px;border-radius:50%;border:1px solid #83f5d0;animation:orb-ring 2.8s ease-out infinite}
+@keyframes orb-breathe{50%{box-shadow:0 0 22px #83f5d033}}
+@keyframes orb-ring{from{transform:scale(1);opacity:.6}to{transform:scale(1.5);opacity:0}}
+.ask-prompt{margin:2px 0;font-size:15px}
+.ask-suggestions{width:100%}.ask-suggestions .row{min-height:40px;font-size:12px;color:#c9d6cd}
+/* Chrome 79 (watch WebView) has no flex gap: space flex children with margins instead, and zero gap so newer browsers do not double it. */
+#device .row,#device .app-roller,#device .roller-app,#device .watch-seconds,#device .watch-date,#device .watch-zone,#device .home-bar,#device .ask-ai{gap:0}
+#device .row>*+*{margin-left:8px}
+.roller-rail{margin-left:8px}.landscape .roller-rail{margin-left:3px}
+.roller-app svg{margin-right:16px}.landscape .roller-app svg{margin-right:9px}.landscape .roller-app.selected svg{margin-right:13px}
+.watch-seconds>*+*,.watch-date>*+*{margin-left:8px}.watch-zone>*+*{margin-left:12px}
+.home-bar .home-icon{margin-right:9px}
+.ask-ai>*{margin-top:0;margin-bottom:0}.ask-ai>*+*{margin-top:10px}
+/* Watch APK: only the device surface, filling the display (fit() scales and centres it). */
+html.on-device,html.on-device body{height:100%;margin:0;overflow:hidden;background:#030504}
+html.on-device header,html.on-device footer,html.on-device main>aside,html.on-device .dimension{display:none}
+html.on-device main{display:block;padding:0;margin:0;max-width:none}
+html.on-device .stage{width:auto}
+html.on-device .device{position:fixed;left:0;top:0;margin:0;transform-origin:0 0;box-shadow:none}
+/* Android WebView boosts font sizes in wide blocks (and unevenly); the launcher is designed to exact pixels. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* ---- Watch: touch and performance (PowerVR GE8300, Chrome 79) ----
+   Chrome 79 has no :focus-visible, so taps left its amber focus ring on buttons. Motion here stays on the
+   compositor (transform/opacity); effects that repaint every frame are dropped or replaced. The browser keeps the full set. */
+html.on-device *{-webkit-tap-highlight-color:transparent}
+html.on-device button:focus,html.on-device input:focus,html.on-device select:focus{outline:none}
+html.on-device body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+/* The display is physically rounded; a rounded clip here masks every animated layer inside it. */
+html.on-device .device{border-radius:0;isolation:auto}
+/* Peace artwork: no blend, blur, mask or float. The grid moves above it, which matches screen blending on this near-black ground. */
+html.on-device .grid{z-index:-1}
+html.on-device .peace{z-index:-2;mix-blend-mode:normal}
+html.on-device .peace-layer{mix-blend-mode:normal;-webkit-mask-image:none;mask-image:none}
+html.on-device .peace-art{filter:none}
+html.on-device .peace-aura{display:none}
+html.on-device .peace-render{animation:none}
+html.on-device .peace-render:after{mix-blend-mode:normal}
+/* Bottom-up reveal as a lifting veil (a transform), instead of an animated mask that re-rasters the image each frame. */
+.peace-veil{display:none;position:absolute;left:0;right:0;top:0;height:230%;background:linear-gradient(#030504 0,#030504 50%,rgba(3,5,4,0) 56%);transform:translateY(-56%);pointer-events:none}
+html.on-device .peace-veil{display:block}
+html.on-device .peace-render.is-replaying .peace-art{animation:peace-lite-reveal 2.8s cubic-bezier(.42,0,.18,1) .06s both}
+html.on-device .peace-render.is-replaying .peace-veil{animation:peace-veil-lift 2.8s cubic-bezier(.42,0,.18,1) both}
+@keyframes peace-lite-reveal{from{opacity:0;transform:translateY(10px)}to{opacity:.96;transform:none}}
+@keyframes peace-veil-lift{from{transform:translateY(0)}to{transform:translateY(-56%)}}
+/* Home entrance without blur or letter-spacing (both repaint or relayout every frame). */
+html.on-device #view.home-entering>:not(.watch-exit-layer){animation-name:home-rise-lite}
+html.on-device #view.home-entering>:nth-child(1){animation-name:home-tag-wipe}
+html.on-device #view.home-entering>:nth-child(3){animation-name:home-track-lite}
+html.on-device .device.home-entering .home-bar{animation-name:home-rise-lite}
+@keyframes home-rise-lite{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes home-track-lite{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+/* Idle motion: keep the transform/opacity loops, drop shadow, filter, background-position and top animations. */
+html.on-device .selection-frame:before{animation-name:notch-lite}
+@keyframes notch-lite{50%{transform:scaleY(1.7)}}
+html.on-device .roller-app.selected svg{filter:none;animation:none}
+html.on-device .roll-prev,html.on-device .roll-next{animation:none}
+html.on-device .session-dot{animation-name:session-lite}
+@keyframes session-lite{50%{opacity:.35}}
+html.on-device .ai-star svg,html.on-device .ask-orb svg{animation-name:star-lite}
+@keyframes star-lite{0%,100%{transform:none}45%{transform:scale(1.15) rotate(12deg)}}
+html.on-device .home-bar[data-mode=ask] .home-label{animation:none;background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#fff}
+html.on-device .ask-orb{animation:none}

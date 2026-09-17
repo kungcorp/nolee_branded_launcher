@@ -1,0 +1,16 @@
+**/build/
+**/.gradle/
+**/.kotlin/
+**/local.properties
+.temp/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+.env
+.env.*
+*.keystore
+*.jks
+.nolee-key
+*.apk
+!releases/**/*.apk

@@ -1,0 +1,189 @@
+{
+  "source": "Watch_Face/index.html + js/watchface.js",
+  "scale": 2,
+  "panel": {
+    "width": 408,
+    "height": 502,
+    "inset": 2,
+    "radius": 112,
+    "scale": 0.9805825242718447,
+    "grainContrast": 1.6,
+    "metalGamma": 1.6,
+    "left": 11.96039603960395,
+    "top": 14.029702970297024,
+    "cornerDelta": 10.21782178217822,
+    "heightInset": 2.069306930693074
+  },
+  "layers": {
+    "hour": {
+      "x": -25,
+      "y": -112,
+      "width": 49,
+      "height": 141,
+      "path": "M -12.5 17 L -6.5 -80 L 0 -100 L 6.5 -80 L 12.5 17 Z",
+      "colors": [
+        "#eafff3",
+        "#83f5d0"
+      ],
+      "stroke": "#04120c",
+      "strokeWidth": 1.1
+    },
+    "hourGlow": {
+      "x": -25,
+      "y": -112,
+      "width": 49,
+      "height": 141
+    },
+    "minute": {
+      "x": -21,
+      "y": -164,
+      "width": 42,
+      "height": 195,
+      "path": "M -9 19 L -4.68 -132 L 0 -152 L 4.68 -132 L 9 19 Z",
+      "colors": [
+        "#eafff3",
+        "#83f5d0"
+      ],
+      "stroke": "#04120c",
+      "strokeWidth": 1.1
+    },
+    "minuteGlow": {
+      "x": -21,
+      "y": -164,
+      "width": 42,
+      "height": 195
+    },
+    "second": {
+      "x": -14,
+      "y": -180,
+      "width": 28,
+      "height": 228
+    },
+    "day": {
+      "x": -16,
+      "y": -74,
+      "width": 31,
+      "height": 97
+    },
+    "h24": {
+      "x": -14,
+      "y": -50,
+      "width": 28,
+      "height": 66
+    },
+    "date": {
+      "x": -16,
+      "y": -76,
+      "width": 31,
+      "height": 99
+    },
+    "month": {
+      "x": -16,
+      "y": -44,
+      "width": 31,
+      "height": 65
+    },
+    "hub": {
+      "x": 190,
+      "y": 240,
+      "width": 60,
+      "height": 60
+    },
+    "subcaps": {
+      "x": 99,
+      "y": 256,
+      "width": 241,
+      "height": 153
+    },
+    "digit0": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 7.933221817016602
+    },
+    "digit1": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 5.749582290649414
+    },
+    "digit2": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 7.933221817016602
+    },
+    "digit3": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 7.933221817016602
+    },
+    "digit4": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 8.233722686767578
+    },
+    "digit5": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 7.933221817016602
+    },
+    "digit6": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 7.973288536071777
+    },
+    "digit7": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 7.652754306793213
+    },
+    "digit8": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 7.933221817016602
+    },
+    "digit9": {
+      "x": 0,
+      "y": -16,
+      "width": 12,
+      "height": 20,
+      "advance": 7.973288536071777
+    },
+    "base": {
+      "x": 0,
+      "y": 0,
+      "width": 440,
+      "height": 540
+    },
+    "panel": {
+      "x": 11.96039603960395,
+      "y": 14.029702970297024,
+      "width": 416.0792079207921,
+      "height": 511.94059405940595
+    }
+  },
+  "moon": {
+    "x": 172,
+    "y": 102,
+    "cell": 96,
+    "columns": 16,
+    "frames": 256
+  },
+  "sourceSha256": "95ebdd7670364a51c8ec1dc74e832d2c049ade23248c8194a5eabe38ec058f05"
+}
