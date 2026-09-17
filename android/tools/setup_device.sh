@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command watch setup for the Nolee Custom Launcher: install, grants, root, companions, kiosk.
+# One-command device setup for the Nolee Branded Launcher: install, grants, root, companions, kiosk.
 #
 #     android/tools/setup_device.sh [SERIAL]
 #
@@ -12,23 +12,34 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 SERIAL="${1:-${ANDROID_SERIAL:-}}"
+[ -n "$SERIAL" ] || { echo "Pass the owner's selected ADB serial." >&2; exit 1; }
 ADB=(adb)
 [ -n "$SERIAL" ] && ADB=(adb -s "$SERIAL")
-PKG=ai.nolee.customlauncher
+PKG=ai.nolee.brandedlauncher
 URI=content://io.kungcorp.nolee.launcher.state
 APK="${APK:-app/build/outputs/apk/debug/app-debug.apk}"
-COMPANIONS=(ai.nolee.camera ai.nolee.files ai.nolee.gallery ai.nolee.phone ai.nolee.sms)
+read -r -a COMPANIONS <<< "${NOLEE_COMPANIONS-ai.nolee.camera ai.nolee.files ai.nolee.gallery ai.nolee.phone ai.nolee.sms}"
+for companion in "${COMPANIONS[@]}"; do
+    [[ "$companion" =~ ^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+$ ]] || { echo "Invalid companion package name" >&2; exit 1; }
+done
 
 # A Launcher call that must succeed. The provider answers ok=false with a reason rather than failing.
 call() {
     local out
     out="$("${ADB[@]}" shell content call --uri "$URI" --method "$@")"
     echo "  $1 ${*:2}: $(echo "$out" | grep -oE 'ok=(true|false)|reason=[^,}]*' | tr '\n' ' ')"
-    if echo "$out" | grep -q 'ok=false'; then
+    if ! echo "$out" | grep -q 'ok=true'; then
         echo "FAILED: $1 was refused (see the reason above)." >&2
         exit 1
     fi
 }
+
+[ -f "$APK" ] || { echo "Build first: $APK is missing." >&2; exit 1; }
+for companion in "${COMPANIONS[@]}"; do
+    "${ADB[@]}" shell pm path "$companion" | grep -q '^package:' || {
+        echo "Install the owner-selected companion first: $companion" >&2; exit 1;
+    }
+done
 
 echo "== leaving kiosk (Launcher grants need it off; refused harmlessly if none is running)"
 "${ADB[@]}" shell content call --uri "$URI" --method exit_kiosk >/dev/null || true

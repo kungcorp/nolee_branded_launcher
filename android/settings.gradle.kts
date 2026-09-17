@@ -3,5 +3,5 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories { google(); mavenCentral() }
 }
-rootProject.name = "Nolee_Custom_Launcher"
+rootProject.name = "Nolee_Branded_Launcher"
 include(":app")

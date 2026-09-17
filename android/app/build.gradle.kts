@@ -7,9 +7,11 @@ plugins {
 }
 
 // Voice commands run offline on Vosk's small English model, bundled so a fresh install can listen straight away.
-// One canonical copy is shared with Nolee_Robot and Harness and staged into generated assets at build time, not
-// duplicated in the source tree. A missing model fails the build: the APK would install and never understand anything.
-val voskModelSource = rootProject.file("../../../Nolee_Robot/vosk-model-en-us-staging")
+// Fetch the public, checksum-pinned model with tools/setup_model.py before building.
+// An explicit override supports an existing local copy without relying on private sibling repos.
+val voskModelSource = rootProject.file(providers.gradleProperty("voskModelDir")
+    .orElse(providers.environmentVariable("VOSK_MODEL_DIR"))
+    .getOrElse("models/vosk-model-small-en-us-0.15"))
 val voskAssetName = "vosk-model-small-en-us-0.15"
 val generatedVoskAssets = layout.buildDirectory.dir("generated/vosk-assets")
 val prepareVoskAssets by tasks.registering(Sync::class) {
@@ -27,14 +29,14 @@ val prepareVoskAssets by tasks.registering(Sync::class) {
 }
 
 android {
-    namespace = "ai.nolee.customlauncher"
+    namespace = "ai.nolee.brandedlauncher"
     compileSdk = 35
     defaultConfig {
-        applicationId = "ai.nolee.customlauncher"
+        applicationId = "ai.nolee.brandedlauncher"
         minSdk = 28
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.3.0"
+        versionCode = 4
+        versionName = "0.4.0"
         ndk { abiFilters += "arm64-v8a" }
     }
     buildTypes {
@@ -50,6 +52,7 @@ android {
     buildFeatures { compose = true; buildConfig = true }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
     sourceSets["main"].assets.srcDir(generatedVoskAssets)
+    sourceSets["main"].assets.srcDir(rootProject.file("../licenses"))
 }
 
 tasks.named("preBuild").configure { dependsOn(prepareVoskAssets) }

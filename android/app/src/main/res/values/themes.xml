@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ground">#030504</color>
-    <style name="Theme.CustomLauncher" parent="android:Theme.Material.NoActionBar">
+    <style name="Theme.BrandedLauncher" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/ground</item>
         <item name="android:statusBarColor">@color/ground</item>
         <item name="android:navigationBarColor">@color/ground</item>

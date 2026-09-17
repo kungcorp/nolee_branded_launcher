@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Build the Custom Launcher APK from an agent shell, where a plain `./gradlew` cannot run.
+# Build the Branded Launcher APK from an agent shell, where a plain `./gradlew` cannot run.
 #
 #     tools/agent_build.sh                    # :app:assembleDebug
 #     tools/agent_build.sh :app:assembleRelease

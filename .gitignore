@@ -11,6 +11,9 @@ Thumbs.db
 .env.*
 *.keystore
 *.jks
+**/signing.properties
+*.pem
+*.key
 .nolee-key
 *.apk
 !releases/**/*.apk

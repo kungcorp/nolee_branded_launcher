@@ -32,8 +32,8 @@
 
     <application
         android:allowBackup="false"
-        android:label="Nolee Custom Launcher"
-        android:theme="@style/Theme.CustomLauncher">
+        android:label="Nolee Branded Launcher"
+        android:theme="@style/Theme.BrandedLauncher">
 
         <!-- Portrait until the landscape layout is ported. HOME is required before the Nolee Launcher
              accepts this as the kiosk primary app. -->
