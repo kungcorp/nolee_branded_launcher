@@ -1,6 +1,6 @@
 # Third-party notices
 
-- Spline Sans Mono (`assets/spline.ttf`, `android/app/src/main/res/font/spline_sans_mono.ttf`):
+- Spline Sans Mono (`android/app/src/main/res/font/spline_sans_mono.ttf`):
   Spline Sans Mono Project Authors, SIL Open Font License 1.1. See
   [OFL](licenses/SplineSansMono-OFL.txt) and [upstream](https://github.com/SorkinType/SplineSansMono).
 - `vosk-model-small-en-us-0.15`: Copyright 2020 Alpha Cephei Inc., Apache License 2.0.

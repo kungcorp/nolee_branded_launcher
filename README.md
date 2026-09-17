@@ -2,13 +2,11 @@
 
 A native Android example for Nolee DevKit Ultra: animated Home/Watch navigation, device controls,
 vitals, offline Quick Command and a streaming Nolee AI ball persona. Fork it or use it as a full
-app reference. `android/` is the device app; root `index.html` is a simulated browser prototype.
+app reference. `android/` contains the device app.
 The native app currently uses portrait orientation. It does not replace the stock Launcher's
 device management, activation or security boundaries.
 
-Version 0.4.0 uses package `ai.nolee.brandedlauncher`. The historical 0.3.0 Custom Launcher APK
-uses a different package, so this is a separate install with separate data and grants. Keep the
-old installation until the owner has checked the new one; setup does not migrate or delete its data.
+The Android package is `ai.nolee.brandedlauncher`.
 
 ## Build
 
@@ -30,7 +28,6 @@ Nolee key or model-provider API key is required to build.
 Output: `android/app/build/outputs/apk/debug/app-debug.apk`. Debug builds include a shell-permission
 protected test receiver; release builds do not register it. `assembleRelease` produces an unsigned
 APK: use your own signing configuration to distribute a fork, without committing private keys.
-The APK under `releases/0.3.0-cloud-ai-baseline/` is historical, not a build of current source.
 
 ## Owner-approved setup and kiosk companions
 
@@ -100,8 +97,7 @@ For a fork, follow these boundaries:
 
 1. Obtain owner approval and handle missing root/key with a useful setup message.
 2. Send `/ask` with `mode: "general"` and your `app_prompt` (at most 4,000 characters).
-   `APP_PROMPT` describes this app, its persona, controls and memory. Do not use the stock
-   Launcher's `support_nolee` identity for your custom app.
+   `APP_PROMPT` describes this app, its persona, controls and memory. Adapt it to your own app.
 3. Send a question or 16 kHz mono PCM WAV, then consume streamed transcript/text/audio/errors.
    Voice preferences and tool capabilities belong to your app.
 4. Let the backend enforce activation, expiry, revocation and shared usage on every request.
@@ -151,8 +147,3 @@ boundary. Owners can inspect/edit the Profile page; saved facts are context on t
 
 See [third-party notices](THIRD_PARTY_NOTICES.md).
 Project code is [MIT licensed](LICENSE). Nolee trademarks are not licensed for endorsement.
-The historical scripts under root `tools/` are design/provider experiments, not prerequisites:
-the Perpetual exporters reference an external design, and the Qwen probe uses a separate provider
-account. Neither is the runtime Nolee-key integration or required by the Android build.
-[Historical design notes](docs/DESIGN_HISTORY.md) preserve superseded experiments, not current
-setup instructions or APIs.
