@@ -4,6 +4,18 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class CloudCommandsTest {
+    @Test fun kioskExitAndAiVolumeAreBoundedTools() {
+        for (name in listOf("exit kiosk", "leave kiosk")) {
+            assertEquals(VoiceCommand.ExitKiosk, CloudCommands.resolve(name, null))
+            assertNull(CloudCommands.resolve(name, 20))
+        }
+        for (percent in listOf(0, 35, 100)) {
+            val command = CloudCommands.resolve("set ai volume", percent)
+            assertEquals(VoiceCommand.AiVolume(percent), command)
+            assertFalse(command!!.needsDeviceNavigation())
+        }
+        for (percent in listOf(null, -1, 101)) assertNull(CloudCommands.resolve("set ai volume", percent))
+    }
     @Test fun conversationControlsAreExplicitAndDoNotChangeSystemVolume() {
         assertEquals(VoiceCommand.Transcript(true), CloudCommands.resolve("show transcript", null))
         assertEquals(VoiceCommand.Transcript(false), CloudCommands.resolve("hide transcript", null))

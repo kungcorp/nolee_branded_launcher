@@ -18,6 +18,7 @@ object ProfileUpdates {
 
 /** Conversation-only commands must not trigger the device-control navigation handoff. */
 fun VoiceCommand.needsDeviceNavigation(): Boolean = when (this) {
-    is VoiceCommand.Transcript, is VoiceCommand.SpokenAnswers, is VoiceCommand.UpdateProfile, VoiceCommand.StartAi -> false
+    is VoiceCommand.Transcript, is VoiceCommand.SpokenAnswers, is VoiceCommand.UpdateProfile,
+    is VoiceCommand.AiVolume, VoiceCommand.StartAi -> false
     else -> true
 }

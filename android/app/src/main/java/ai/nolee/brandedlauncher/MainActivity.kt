@@ -939,7 +939,9 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             val problem = device.exitKiosk()
             device.refresh()
-            Toast.makeText(this@MainActivity, problem ?: "Kiosk exited.", Toast.LENGTH_SHORT).show()
+            if (problem != null) {
+                Toast.makeText(this@MainActivity, problem, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -1031,6 +1033,8 @@ class MainActivity : ComponentActivity() {
 
     private fun describe(command: VoiceCommand): String = when (command) {
         VoiceCommand.StartAi -> "OPENING NOLEE AI"
+        VoiceCommand.ExitKiosk -> "LEAVING KIOSK"
+        is VoiceCommand.AiVolume -> "AI / MEDIA VOLUME ${command.percent}%"
         is VoiceCommand.UpdateProfile -> "UPDATING PROFILE"
         is VoiceCommand.Transcript -> if(command.on) "SHOWING TRANSCRIPT" else "HIDING TRANSCRIPT"
         is VoiceCommand.SpokenAnswers -> if(command.on) "AI VOICE ON" else "AI VOICE MUTED"
@@ -1054,6 +1058,16 @@ class MainActivity : ComponentActivity() {
      */
     private suspend fun perform(command: VoiceCommand) {
         when (command) {
+            VoiceCommand.ExitKiosk -> {
+                val problem = device.exitKiosk()
+                device.refresh()
+                if (problem != null) Toast.makeText(this, problem, Toast.LENGTH_SHORT).show()
+            }
+            is VoiceCommand.AiVolume -> {
+                val stream = SoundStream.Media.stream
+                device.setStream(stream, (command.percent * device.streamMax(stream) + 50) / 100)
+                device.savedLevels = null
+            }
             VoiceCommand.StartAi -> if (page != Page.Persona) {
                 openFromHome(AppEntry.Watch)
                 delay(PAGE_SETTLE_MS)

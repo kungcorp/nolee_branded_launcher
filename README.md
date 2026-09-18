@@ -169,6 +169,12 @@ boundary. Owners can inspect/edit the Profile page; saved facts are context on t
   animated waveform and is disabled.
 - Offline voice: “open Nolee AI settings” opens AI settings; “open Nolee AI” starts a conversation.
   Vosk uses the dictionary spelling “no lee a i” for the brand pronunciation.
+- Offline voice and Nolee AI accept “exit kiosk” / “leave kiosk” to return to stock Launcher.
+  Successful exits are silent; failed exits still show an error.
+- Nolee AI can adjust its speaking volume with “set your volume to 40 percent” or “speak quieter”.
+  The `set ai volume` tool changes the shared media stream and stays in the conversation.
+  Other media shares that level; ring, alarm, notification and call volume are unaffected.
+  Changes take effect after the current answer. Spoken answers on/off remains a separate control.
 - Nolee AI settings show status/shared usage, Web search, Spoken answers and a separate Voice subpage.
 
 `MainActivity.kt`: navigation/lifecycle; `CloudAi.kt`: requests/capture/playback;

@@ -297,7 +297,13 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
                 .put("device_commands", JSONArray(CloudCommands.names))
                 .put("return_transcript", true)
                 .put("mode", "general")
-                .put("app_prompt", APP_PROMPT)
+                .put("app_prompt", APP_PROMPT + run {
+                    val audio = context.getSystemService(Context.AUDIO_SERVICE) as android.media.AudioManager
+                    val stream = android.media.AudioManager.STREAM_MUSIC
+                    val percent = (audio.getStreamVolume(stream) * 100 + audio.getStreamMaxVolume(stream) / 2) /
+                        audio.getStreamMaxVolume(stream).coerceAtLeast(1)
+                    " Current AI/media volume: $percent percent."
+                })
                 .put("voice", voice(context))
                 .put("client_request_id", UUID.randomUUID().toString())
                 .put("app_version", "branded-launcher-" + BuildConfig.VERSION_NAME)
@@ -527,6 +533,10 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
             "If Name is absent you may naturally ask what to call the owner once; don't repeatedly ask if declined. Do not interview them for the other fields. " +
             "A queued profile update will be saved locally after the reply; never claim a write is already confirmed. Continue the conversation naturally. " +
             "Use mute ai voice / enable ai voice for your own spoken replies, not system volume; these preferences persist across sessions. " +
+            "Use set ai volume with percent 0-100 to adjust how loud your voice is without leaving this conversation. " +
+            "Your speech uses the shared media volume stream; this changes other media too, but not ring, alarm, notification or call volume. " +
+            "For requests such as speak quieter or louder, adjust from the supplied current AI/media volume; if no amount is specified, use a 10 percentage point step, bounded to 0-100. " +
+            "Use exit kiosk when the owner asks to exit or leave kiosk and return to the stock Nolee Launcher. " +
             "Say briefly what you will do, never claim an action already succeeded. Do not queue actions merely mentioned in a question or profile. " +
             "Do not behave as a product support bot unless the owner asks for product help."
         val VOICES = listOf("Serena", "Tina", "Jennifer", "Ethan", "Aiden", "Mione", "Harvey", "Andre", "Ryan")

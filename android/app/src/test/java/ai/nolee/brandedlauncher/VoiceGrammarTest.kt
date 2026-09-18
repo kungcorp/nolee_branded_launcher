@@ -7,6 +7,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VoiceGrammarTest {
+    @Test fun kioskExitPhrasesAreRecognized() {
+        for (phrase in listOf("exit kiosk", "leave kiosk")) {
+            assertTrue(phrase in VoiceGrammar.phrases)
+            assertEquals(VoiceCommand.ExitKiosk, VoiceGrammar.parse(phrase))
+        }
+        assertNull(VoiceGrammar.parse("do not leave kiosk"))
+    }
     @Test
     fun aiSettingsAreDistinctFromStartingAConversation() {
         for (name in listOf("a i", "cloud a i", "no lee a i")) {

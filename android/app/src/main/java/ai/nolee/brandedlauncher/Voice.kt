@@ -276,6 +276,8 @@ class VoiceListener(
 /** Everything the voice controls can do. Each maps onto an existing page or control. */
 sealed interface VoiceCommand {
     data object StartAi : VoiceCommand
+    data object ExitKiosk : VoiceCommand
+    data class AiVolume(val percent: Int) : VoiceCommand
     data class UpdateProfile(val values: Map<ProfileField, String>) : VoiceCommand
     data class Transcript(val on: Boolean) : VoiceCommand
     data class SpokenAnswers(val on: Boolean) : VoiceCommand
@@ -346,6 +348,7 @@ object VoiceGrammar {
     val phrases: List<String> by lazy {
         buildSet {
             addAll(startAiPhrases)
+            addAll(listOf("exit kiosk", "leave kiosk"))
             addAll(aiSettingsPhrases)
             pages.keys.forEach { name ->
                 add(name); add("open $name"); add("go to $name"); add("show $name")
@@ -392,6 +395,7 @@ object VoiceGrammar {
         val text = raw.lowercase().replace(Regex("[^a-z0-9 ]"), " ").split(' ')
             .filter { it.isNotBlank() && it != "unk" }.joinToString(" ")
         if (text.isBlank()) return null
+        if (text == "exit kiosk" || text == "leave kiosk") return VoiceCommand.ExitKiosk
         if (text in aiSettingsPhrases || text in typedAiSettingsPhrases) return VoiceCommand.Open(Page.NoleeAi)
         if (text in startAiPhrases || text in listOf("open nolee ai", "start nolee ai", "turn on nolee ai", "open ai", "start ai")) return VoiceCommand.StartAi
         val words = text.split(' ')

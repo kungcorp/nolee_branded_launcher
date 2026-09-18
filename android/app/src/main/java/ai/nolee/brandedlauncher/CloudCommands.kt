@@ -11,6 +11,9 @@ object CloudCommands {
                 put("mute ai voice", VoiceCommand.SpokenAnswers(false))
                 put("enable ai voice", VoiceCommand.SpokenAnswers(true))
                 put("set brightness", VoiceCommand.Brightness(50))
+                put("exit kiosk", VoiceCommand.ExitKiosk)
+                put("leave kiosk", VoiceCommand.ExitKiosk)
+                put("set ai volume", VoiceCommand.AiVolume(50))
                 SoundStream.entries.forEach { put("set ${if (it == SoundStream.UiEffects) "system" else it.label.lowercase()} volume", VoiceCommand.Volume(it, 50)) }
             }
     }
@@ -23,6 +26,7 @@ object CloudCommands {
         return when (val command = commands[name]) {
         is VoiceCommand.Brightness -> percent?.takeIf { it in 0..100 }?.let { command.copy(percent = it.coerceAtLeast(5)) }
         is VoiceCommand.Volume -> percent?.takeIf { it in 0..100 }?.let { command.copy(percent = it) }
+        is VoiceCommand.AiVolume -> percent?.takeIf { it in 0..100 }?.let { command.copy(percent = it) }
         else -> command.takeIf { percent == null }
         }
     }
