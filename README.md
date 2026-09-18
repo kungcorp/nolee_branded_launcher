@@ -187,7 +187,7 @@ Cancellation stops the callback along with the main request. See
 
 Device actions animate Watch → Home → destination. Profile/transcript/audio controls stay in
 conversation. Profile tools save clearly volunteered owner facts to bounded Name/Age/Occupation/
-City/About fields, preserving unspecified fields. Empty strings clear only when requested.
+City/Country/About fields, preserving unspecified fields. Empty strings clear only when requested.
 Prompt rules prohibit inferred/third-party facts and secrets, but are not a hard semantic security
 boundary. Owners can inspect/edit the Profile page; saved facts are context on the next question.
 
@@ -199,7 +199,9 @@ boundary. Owners can inspect/edit the Profile page; saved facts are context on t
 - Long-touch camera lid to toggle transcript; Back closes it. Opening fades
   over 600 ms and closing over 500 ms, retaining content through exit.
 - Swipe persona left/right for views, up for top, down for front.
-- Backend progress uses THINKING, SEARCHING, COMPLETE and REPLYING labels.
+- Backend progress uses THINKING, SEARCHING, COMPLETE and REPLYING labels, all aligned
+  with LISTENING. COMPLETE marks backend tool processing and may be brief; pending device
+  actions still follow the reply.
 - Speaker and status labels match the transcript body size. Transcript text streams and smoothly follows; existing answers appear immediately when reopened. Manual scrolling pauses follow until a new turn
   or reopening. AI can show/hide transcript and mute/enable its own replies.
 - With spoken answers off, entering AI automatically opens the transcript. Its fixed Ask
