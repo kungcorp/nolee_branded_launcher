@@ -35,8 +35,8 @@ android {
         applicationId = "ai.nolee.brandedlauncher"
         minSdk = 28
         targetSdk = 35
-        versionCode = 12
-        versionName = "0.4.8"
+        versionCode = 13
+        versionName = "0.4.9"
         ndk { abiFilters += "arm64-v8a" }
     }
     buildTypes {

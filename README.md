@@ -91,6 +91,24 @@ permissions. Do not grant this app unrelated camera/contacts/phone/storage permi
 Check grants, a vitals reading, microphone, brightness and companion handoff before delivery.
 Do not force-stop a kiosk primary app to navigate: that invokes recovery.
 
+## Start talking
+
+1. Activate Nolee AI in the stock Nolee Launcher before opening this app's AI conversation.
+2. From Home, open **Watch**, let the full-screen face appear, then hold the face to enter
+   Nolee AI. Alternatively, choose **Home → Nolee AI → Start Nolee AI**. It begins listening.
+3. To ask another question or interrupt an answer, hold the ball until the listening feedback
+   appears. Releasing too early cancels the hold.
+4. Long-touch the camera lid to open the transcript. Its **Ask** button starts listening;
+   **Interrupt** stops the current answer and listens again. The waveform means recording is
+   active. With spoken answers off, the transcript opens automatically.
+5. For **offline Vosk Quick Command**, tap **Quick Command** at the bottom of Home and say a
+   supported command, such as “open camera”, “open Nolee AI”, “open Nolee AI settings”, or
+   “leave kiosk”. This is a separate command recognizer, not the cloud AI conversation or an
+   always-listening wake word. It works without Nolee AI activation or an internet connection.
+
+Nolee AI needs internet access and uses the device's shared AI allowance. Its settings let you
+change spoken answers, voice and web search. The side button returns from the AI screen to Watch.
+
 ## Nolee AI integration for your own app
 
 Activate Nolee AI in stock Launcher first. Hold the full-screen Watch face or choose
@@ -143,9 +161,29 @@ Nonempty Country is included with the other profile facts in AI requests.
 [CloudCommands.kt](android/app/src/main/java/ai/nolee/brandedlauncher/CloudCommands.kt) declares
 bounded local actions. The server validates up to three `device.actions`; the app validates again
 and executes after a successful response/playback. Errors/cancellation discard queued actions.
-This is deferred local dispatch, not a tool-result round trip: the model cannot know whether
-a setting change succeeded. Never execute arbitrary model-generated shell commands or treat
+Most setting changes use deferred local dispatch: the model cannot verify their success from
+the queued action alone. The opt-in media-volume event described below runs before the reply. Never execute arbitrary model-generated shell commands or treat
 model output as additional permission. Sensitive/destructive tools in forks need local confirmation.
+
+`app_prompt` explains when to use capabilities; it does not implement them. Custom apps can
+advertise their own command names in `device_commands` and handle the returned actions locally.
+The command payload supports `command`, the defined volume/brightness `percent` argument, and
+`profile` for `update profile`; it is not an arbitrary argument schema. Tools with other arguments
+or custom result formats need gateway support, not only a prompt change.
+
+`get_device_status` is a separate read-only tool with a result round trip. When the model
+requests it, the app reads the watch's current date/time/timezone, battery/charging,
+Wi-Fi/Bluetooth state, brightness, volume streams, storage, kiosk and AI preferences.
+The app returns the readings before the answer is generated; they are not attached to every
+question. Unavailable readings are null. Wi-Fi association does not establish internet access,
+and the watch clock is not independently verified. No location, network names, contacts,
+messages, health readings or hardware identifiers are included.
+
+The app advertises `device_status_tool: true`, handles the SSE `device.tool_call` event,
+and posts its bounded result to `/device-tool-result` with the same device credential and
+request/call IDs. The original stream continues, so this uses one question allowance.
+Cancellation stops the callback along with the main request. See
+[DeviceStatusTool.kt](android/app/src/main/java/ai/nolee/brandedlauncher/DeviceStatusTool.kt).
 
 Device actions animate Watch → Home → destination. Profile/transcript/audio controls stay in
 conversation. Profile tools save clearly volunteered owner facts to bounded Name/Age/Occupation/
@@ -161,7 +199,7 @@ boundary. Owners can inspect/edit the Profile page; saved facts are context on t
 - Long-touch camera lid to toggle transcript; Back closes it. Opening fades
   over 600 ms and closing over 500 ms, retaining content through exit.
 - Swipe persona left/right for views, up for top, down for front.
-- Transcript text streams and smoothly follows. Manual scrolling pauses follow until a new turn
+- Speaker and status labels match the transcript body size. Transcript text streams and smoothly follows. Manual scrolling pauses follow until a new turn
   or reopening. AI can show/hide transcript and mute/enable its own replies.
 - With spoken answers off, entering AI automatically opens the transcript. Its fixed Ask
   button starts another microphone window without closing the transcript; during an answer,
@@ -170,7 +208,8 @@ boundary. Owners can inspect/edit the Profile page; saved facts are context on t
 - Offline voice: “open Nolee AI settings” opens AI settings; “open Nolee AI” starts a conversation.
   Vosk uses the dictionary spelling “no lee a i” for the brand pronunciation.
 - Offline voice and Nolee AI accept “exit kiosk” / “leave kiosk” to return to stock Launcher.
-  Successful exits are silent; failed exits still show an error.
+  Successful exits show no toast. The outer outline fades first, then the ball shrinks and
+  fades while the background fades at full size. Failed exits restore the screen and show an error.
 - Nolee AI can adjust its speaking volume with “set your volume to 40 percent” or “speak quieter”.
   The `set ai volume` tool changes the shared media stream and stays in the conversation.
   Other media shares that level; ring, alarm, notification and call volume are unaffected.

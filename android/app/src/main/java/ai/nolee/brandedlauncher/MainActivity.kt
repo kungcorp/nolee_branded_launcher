@@ -38,6 +38,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.withFrameMillis
@@ -53,6 +54,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
@@ -265,6 +267,8 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            val compositionScope = rememberCoroutineScope()
+            SideEffect { kioskExitScope = compositionScope }
             BackHandler {
                 when {
                     personaTranscriptOpen -> personaTranscriptOpen = false
@@ -293,6 +297,7 @@ class MainActivity : ComponentActivity() {
             val dim = animateFloatAsState(if (dimmed) 1f else 0f, tween(if (dimmed) 900 else 260), label = "faceIdle")
             val personaMorph = remember { derivedStateOf { (personaSeconds.floatValue / PERSONA_BODY_SECONDS).coerceIn(0f, 1f) } }
             val fullDial = remember { mutableFloatStateOf(1f) }
+            KioskExitSurface(kioskExitProgress) {
             StageSurface { stage ->
                 PersonaGlitchSurface(stage, page == Page.Persona && !personaReturning &&
                     personaSeconds.floatValue >= PERSONA_ENTER_SECONDS && personaEmotion == PersonaEmotion.Regular) {
@@ -343,7 +348,7 @@ class MainActivity : ComponentActivity() {
                 }
                 // Keep this outside PageSwitch: committing the hold must not recreate the native view.
                 if (personaActive && (page == Page.Watch || page == Page.Persona)) {
-                    PersonaScreen(stage, personaSeconds.floatValue, personaStartedAt, personaEmotion, personaListening, personaReturning, personaCameraView, personaCameraRevision) { personaCameraView = it }
+                    PersonaScreen(stage, personaSeconds.floatValue, personaStartedAt, personaEmotion, personaListening, personaReturning, personaCameraView, personaCameraRevision, exitProgress = { kioskExitProgress.value }) { personaCameraView = it }
                 }
                 if (page != Page.Persona && !personaActive) {
                     Box(Modifier.fillMaxSize().graphicsLayer { alpha = chromeAlpha }) {
@@ -363,10 +368,14 @@ class MainActivity : ComponentActivity() {
                 }
                 // While listening, a tap anywhere cancels rather than reaching the page underneath.
                 if (ask.listening) Box(Modifier.fillMaxSize().pointerInput(Unit) { detectTapGestures { cancelListening() } })
+                Box(Modifier.fillMaxSize().graphicsLayer {
+                    alpha = 1f - (kioskExitProgress.value / .34f).coerceIn(0f, 1f)
+                }) {
                 EdgeLight(stage, ask.listening || personaListening, tealGradient = false,
                     transitionProgress = if (page == Page.Persona && personaHoldPreview > 0f && !personaListening) personaHoldPreview
                         else if (personaActive && !personaReturning && personaSeconds.floatValue < PERSONA_ENTER_SECONDS)
                         (personaSeconds.floatValue / .9f).coerceIn(0f, 1f) else null)
+                }
                 if (personaActive && (page == Page.Watch || page == Page.Persona)) {
                     PersonaLens(stage, (personaSeconds.floatValue / PERSONA_BODY_SECONDS).coerceIn(0f,1f))
                 }
@@ -384,11 +393,13 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        lifecycleScope.launch { kioskExitProgress.snapTo(0f) }
         hideBars()
         lid.start()
         clockJob = lifecycleScope.launch {
@@ -454,6 +465,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (kioskExiting) return true
         if(page==Page.Persona && (personaTranscriptOpen || transcriptLayerVisible))return super.dispatchTouchEvent(event)
         if (event.actionMasked == MotionEvent.ACTION_DOWN) {
             // The wearer taking over stops a voice command mid-flow.
@@ -630,7 +642,7 @@ class MainActivity : ComponentActivity() {
                     voiceFlow = lifecycleScope.launch {
                         try {
                             if (VoiceCommand.ExitKiosk in commands) {
-                                // This is a terminal action, not an animated tour of the app's screens.
+                                // Exit owns its transition and must not resume the microphone.
                                 stopPersonaListening()
                                 perform(VoiceCommand.ExitKiosk)
                                 return@launch
@@ -748,7 +760,10 @@ class MainActivity : ComponentActivity() {
      * Keys are taken before Compose sees them. Left to onKeyDown, Compose used the D-pad to move focus onto the
      * bottom bar and Enter then clicked it, so the lid keys opened Ask AI instead of the selected card.
      */
+    // Android's public Activity hook; the inherited AndroidX bridge carries a library annotation.
+    @android.annotation.SuppressLint("RestrictedApi")
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (kioskExiting && event.keyCode !in setOf(KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN)) return true
         // Firmware emits a discrete F6 pulse after a lid long-touch, not a held key.
         if (page == Page.Persona && event.keyCode in setOf(KeyEvent.KEYCODE_F6, KeyEvent.KEYCODE_F2)) {
             if (event.keyCode == KeyEvent.KEYCODE_F6 && event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
@@ -941,12 +956,29 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private lateinit var kioskExitScope: CoroutineScope
+    private val kioskExitProgress = Animatable(0f)
+    private var kioskExiting by mutableStateOf(false)
+
     private fun exitKiosk() {
-        lifecycleScope.launch {
-            val problem = device.exitKiosk()
-            device.refresh()
-            if (problem != null) {
-                Toast.makeText(this@MainActivity, problem, Toast.LENGTH_SHORT).show()
+        if (kioskExiting) return
+        kioskExiting = true
+        stopPersonaListening()
+        // Use Compose's frame clock, independent of the voice job cancelled onPause.
+        kioskExitScope.launch {
+            var handedOff = false
+            try {
+                kioskExitProgress.animateTo(1f, tween(920, easing = androidx.compose.animation.core.LinearEasing))
+                val problem = device.exitKiosk()
+                handedOff = problem == null
+                device.refresh()
+                if (problem != null) {
+                    kioskExitProgress.animateTo(0f, tween(240))
+                    Toast.makeText(this@MainActivity, problem, Toast.LENGTH_SHORT).show()
+                }
+            } finally {
+                kioskExiting = false
+                if (!handedOff) kioskExitProgress.snapTo(0f)
             }
         }
     }
@@ -1064,11 +1096,7 @@ class MainActivity : ComponentActivity() {
      */
     private suspend fun perform(command: VoiceCommand) {
         when (command) {
-            VoiceCommand.ExitKiosk -> {
-                val problem = device.exitKiosk()
-                device.refresh()
-                if (problem != null) Toast.makeText(this, problem, Toast.LENGTH_SHORT).show()
-            }
+            VoiceCommand.ExitKiosk -> exitKiosk()
             is VoiceCommand.AiVolume -> {
                 val stream = SoundStream.Media.stream
                 device.setStream(stream, (command.percent * device.streamMax(stream) + 50) / 100)

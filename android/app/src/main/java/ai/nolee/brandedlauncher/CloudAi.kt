@@ -98,6 +98,7 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
     private var recorder: AudioRecord? = null
     private var pcm: ByteArrayOutputStream? = null
     @Volatile private var call: Call? = null
+    @Volatile private var toolResultCall: Call? = null
     @Volatile private var player: SpeechPlayer? = null
     @Volatile private var capturing = false
     @Volatile private var autoListen = false
@@ -295,6 +296,7 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
                 .put("audio_enabled", spoken)
                 .put("web_enabled", web)
                 .put("tools_enabled", true)
+                .put("device_status_tool", true)
                 .put("audio_controls_before_reply", true)
                 .put("device_commands", JSONArray(CloudCommands.names))
                 .put("return_transcript", true)
@@ -330,11 +332,35 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
                 val source = response.body?.source() ?: throw IOException("No response body")
                 var event = ""
                 var completed = false
+                var statusRead = false
                 while (turn == generation.get() && !source.exhausted()) {
                     val line = source.readUtf8Line() ?: break
                     if (line.startsWith("event:")) { event = line.removePrefix("event:").trim(); continue }
                     if (!line.startsWith("data:")) continue
                     val chunk = JSONObject(line.removePrefix("data:").trim())
+                    if (event == "device.tool_call") {
+                        if (statusRead || chunk.getString("name") != "get_device_status") throw IOException("Unsupported device status request")
+                        statusRead = true
+                        if (!live || turn != generation.get()) return
+                        val result = DeviceStatusTool.read(context)
+                        val reply = JSONObject().put("request_id", chunk.getString("request_id"))
+                            .put("call_id", chunk.getString("call_id")).put("result", result)
+                        val statusRequest = Request.Builder().url("$BASE/device-tool-result?forceFunctionRegion=ap-southeast-1")
+                            .header("Authorization", "Bearer $key").post(reply.toString().toRequestBody(JSON)).build()
+                        val resultCall = http.newCall(statusRequest)
+                        synchronized(this) {
+                            if (!live || turn != generation.get()) return
+                            toolResultCall = resultCall
+                        }
+                        try {
+                            resultCall.execute().use { statusResponse ->
+                                if (!statusResponse.isSuccessful) throw IOException("Could not return current device status")
+                            }
+                        } finally {
+                            synchronized(this) { if (toolResultCall === resultCall) toolResultCall = null }
+                        }
+                        if (BuildConfig.DEBUG) android.util.Log.i("NoleeAiCommands", "Read get_device_status before reply")
+                    }
                     if (event == "device.actions" || event == "device.audio_controls") {
                         val actions = chunk.getJSONArray("actions")
                         require(actions.length() in 1..3) { "Invalid number of device actions" }
@@ -487,7 +513,7 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
         recorder = null
         runCatching { record?.stop() }
         runCatching { record?.release() }
-        call?.cancel(); call = null; player?.stop(); player = null
+        call?.cancel(); call = null; toolResultCall?.cancel(); toolResultCall = null; player?.stop(); player = null
         if (idle) publish(lastStatus.copy(phase = CloudAiPhase.READY, message = ""))
     }
     fun destroy() {
@@ -543,7 +569,7 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
             "Nolee AI settings show status, shared usage, spoken answers and voice. Home Quick Command is the separate offline Vosk feature; it can open you via Watch. " +
             "You receive the five most recent conversation pairs, the current question and saved Profile facts. History ends with the session; Profile persists. Never claim older memories; ask for a reminder. " +
             "Explain unavailable features honestly. Suggest asking the owner's coding agent to build them on this programmable device, without promising unsupported hardware, permissions or easy implementation. " +
-            "Help with everyday questions, ideas and conversation. Use the supplied profile only when relevant. " +
+            "Help with everyday questions. Use get_device_status for current watch time, battery, charging, connectivity, sound, display, storage and AI settings. Prefer fresh tool readings over history. Null means unknown. Wi-Fi connected does not prove internet access. " +
             "Use queue_device_command for device actions the owner requests. Media volume runs before your reply; other actions run after. " +
             "Use show transcript / hide transcript to change this conversation's transcript. " +
             "Keep the owner's Profile up to date using update profile with a profile object of name, age, occupation, city and/or about. " +

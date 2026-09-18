@@ -25,7 +25,7 @@ private enum class PersonaCameraView(val yaw: Float, val pitch: Float) {
 
 /** Shared native overlay: remains mounted when a watch hold commits to the persona page. */
 @Composable
-fun PersonaScreen(stage: Stage, seconds: Float, startedAt: java.time.LocalDateTime, emotion: PersonaEmotion, listening: Boolean, returning: Boolean, cameraView: Int, cameraRevision: Int, onCameraView: (Int) -> Unit) {
+fun PersonaScreen(stage: Stage, seconds: Float, startedAt: java.time.LocalDateTime, emotion: PersonaEmotion, listening: Boolean, returning: Boolean, cameraView: Int, cameraRevision: Int, exitProgress: () -> Float = { 0f }, onCameraView: (Int) -> Unit) {
     val context = LocalContext.current
     val aurora = remember { BallPersonaView(context) }
     var now by remember { mutableStateOf(java.time.LocalDateTime.now()) }
@@ -93,7 +93,12 @@ fun PersonaScreen(stage: Stage, seconds: Float, startedAt: java.time.LocalDateTi
         }
         AndroidView(
             factory = { aurora },
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().graphicsLayer {
+                // Only the native ball contracts. The star field remains full size.
+                val collapse = kioskExitCollapse(exitProgress())
+                scaleX = 1f - .94f * collapse
+                scaleY = 1f - .94f * collapse
+            },
             update = { it.update(stage, seconds, startedAt, emotion, listening, returning, yaw, pitch) },
         )
     }

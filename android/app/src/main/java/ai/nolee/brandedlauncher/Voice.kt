@@ -169,6 +169,8 @@ class VoiceListener(
                 val json = recognizer.finalResult
                 main.post { complete(current, json) }
             }
+        } catch (_: SecurityException) {
+            fail(current, "Microphone permission is needed")
         } catch (e: Exception) {
             fail(current, e.message ?: "Speech recognition failed")
         } finally {

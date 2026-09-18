@@ -66,7 +66,7 @@ internal fun PersonaTranscript(stage: Stage, entries: List<PersonaTranscriptEntr
                 }else {
                     entries.forEachIndexed { index,entry -> key(entry.turnId,entry.speaker,index) {
                         Column {
-                            BasicText(entry.speaker,style=body.copy(fontSize=stage.sp(11f),color=Palette.Mint))
+                            BasicText(entry.speaker,style=body.copy(color=Palette.Mint))
                             Spacer(Modifier.height(stage.dp(5f)))
                             if(entry.speaker=="NOLEE" && index==entries.lastIndex) {
                                 var shown by remember { mutableStateOf("") }
@@ -84,7 +84,7 @@ internal fun PersonaTranscript(stage: Stage, entries: List<PersonaTranscriptEntr
                     // Do not append/remove a follow-up listening row below a revealing answer.
                     if(partial.isNotBlank() && (entries.isEmpty() || partial!="Listening…")) {
                         Column {
-                            BasicText("STATUS",style=body.copy(fontSize=stage.sp(11f),color=Palette.Mint))
+                            BasicText("STATUS",style=body.copy(color=Palette.Mint))
                             Spacer(Modifier.height(stage.dp(5f)))
                             BasicText(partial,style=body.copy(color=Palette.Sub))
                         }
