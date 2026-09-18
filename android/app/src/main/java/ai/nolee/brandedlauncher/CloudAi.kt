@@ -295,6 +295,7 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
                 .put("audio_enabled", spoken)
                 .put("web_enabled", web)
                 .put("tools_enabled", true)
+                .put("audio_controls_before_reply", true)
                 .put("device_commands", JSONArray(CloudCommands.names))
                 .put("return_transcript", true)
                 .put("mode", "general")
@@ -334,10 +335,10 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
                     if (line.startsWith("event:")) { event = line.removePrefix("event:").trim(); continue }
                     if (!line.startsWith("data:")) continue
                     val chunk = JSONObject(line.removePrefix("data:").trim())
-                    if (event == "device.actions") {
+                    if (event == "device.actions" || event == "device.audio_controls") {
                         val actions = chunk.getJSONArray("actions")
                         require(actions.length() in 1..3) { "Invalid number of device actions" }
-                        pendingCommands.set((0 until actions.length()).map { index ->
+                        val resolved = (0 until actions.length()).map { index ->
                             val action = actions.getJSONObject(index)
                             val rawPercent = action.opt("percent")
                             val percent = if (rawPercent == null || rawPercent == JSONObject.NULL) null else {
@@ -352,7 +353,29 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
                             } else null
                             CloudCommands.resolve(action.getString("command"), percent, profilePatch)
                                 ?: throw IOException("Nolee AI requested an unsupported device action.")
-                        })
+                        }
+                        if (event == "device.audio_controls") {
+                            require(resolved.all { it is VoiceCommand.AiVolume ||
+                                (it is VoiceCommand.Volume && it.stream == SoundStream.Media) }) {
+                                "Only media volume may change before the reply"
+                            }
+                            synchronized(this) {
+                                if (!live || turn != generation.get()) return
+                                val audio = context.getSystemService(Context.AUDIO_SERVICE) as android.media.AudioManager
+                                val stream = android.media.AudioManager.STREAM_MUSIC
+                                for (command in resolved) {
+                                    val percent = when (command) {
+                                        is VoiceCommand.AiVolume -> command.percent
+                                        is VoiceCommand.Volume -> command.percent
+                                        else -> error("Unsupported audio control")
+                                    }
+                                    val target = (percent * audio.getStreamMaxVolume(stream) + 50) / 100
+                                    audio.setStreamVolume(stream, target, 0)
+                                    check(audio.getStreamVolume(stream) == target) { "Could not change media volume" }
+                                    if (BuildConfig.DEBUG) android.util.Log.i("NoleeAiCommands", "Media volume applied before reply: $target")
+                                }
+                            }
+                        } else pendingCommands.set(resolved)
                     }
                     if (event == "done") completed = true
                     chunk.optString("text").takeIf { event == "transcript" && it.isNotEmpty() }?.let {
@@ -521,7 +544,7 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
             "You receive the five most recent conversation pairs, the current question and saved Profile facts. History ends with the session; Profile persists. Never claim older memories; ask for a reminder. " +
             "Explain unavailable features honestly. Suggest asking the owner's coding agent to build them on this programmable device, without promising unsupported hardware, permissions or easy implementation. " +
             "Help with everyday questions, ideas and conversation. Use the supplied profile only when relevant. " +
-            "Use queue_device_command for device actions the owner requests. Actions run after your reply. " +
+            "Use queue_device_command for device actions the owner requests. Media volume runs before your reply; other actions run after. " +
             "Use show transcript / hide transcript to change this conversation's transcript. " +
             "Keep the owner's Profile up to date using update profile with a profile object of name, age, occupation, city and/or about. " +
             "Save clear first-person facts the owner volunteers in normal conversation, without demanding an explicit save command or navigating away. " +
@@ -531,7 +554,7 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
             "If Name is absent you may naturally ask what to call the owner once; don't repeatedly ask if declined. Do not interview them for the other fields. " +
             "Profile updates save locally after your reply; do not claim they are already saved. " +
             "Use mute ai voice / enable ai voice for your own spoken replies, not system volume; these preferences persist across sessions. " +
-            "Use set ai volume with percent 0-100 to adjust how loud your voice is without leaving this conversation. " +
+            "Use set ai volume with percent 0-100 to adjust how loud your voice is without leaving this conversation. The acknowledgement plays at the requested volume; do not say it will change after your reply. " +
             "Your speech uses the shared media volume stream; this changes other media too, but not ring, alarm, notification or call volume. " +
             "For requests such as speak quieter or louder, adjust from the supplied current AI/media volume; if no amount is specified, use a 10 percentage point step, bounded to 0-100. " +
             "Use exit kiosk when the owner asks to exit or leave kiosk and return to the stock Nolee Launcher. " +

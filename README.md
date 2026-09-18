@@ -174,7 +174,10 @@ boundary. Owners can inspect/edit the Profile page; saved facts are context on t
 - Nolee AI can adjust its speaking volume with “set your volume to 40 percent” or “speak quieter”.
   The `set ai volume` tool changes the shared media stream and stays in the conversation.
   Other media shares that level; ring, alarm, notification and call volume are unaffected.
-  Changes take effect after the current answer. Spoken answers on/off remains a separate control.
+  Media-volume changes apply before the acknowledgement is displayed or played, so that reply
+  uses the requested level. A later response failure does not undo an applied volume change.
+  Other device actions still wait for successful reply/playback completion.
+  Spoken answers on/off remains a separate control.
 - Nolee AI settings show status/shared usage, Web search, Spoken answers and a separate Voice subpage.
 
 `MainActivity.kt`: navigation/lifecycle; `CloudAi.kt`: requests/capture/playback;
