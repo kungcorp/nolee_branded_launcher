@@ -306,7 +306,8 @@ class BallPersonaView(context: Context): View(context) {
             ink.setShadowLayer(24f,0f,0f,Color.argb((.30f*labelAlpha*255).toInt(),255,255,255))
             val isProgress=thinkingLabel>listeningAlpha
             val word=if(isProgress)progressLabel else "LISTENING";val spacing=-2f
-            var x=-(ink.measureText(word)+spacing*(word.length-1))/2f
+            // All status words start at the same position as LISTENING.
+            var x=-(ink.measureText("LISTENING")+spacing*("LISTENING".length-1))/2f
             val baseline=-(ink.ascent()+ink.descent())/2f
             for((i,ch) in word.withIndex()){
                 val glyph=ch.toString()

@@ -37,7 +37,7 @@ internal fun cloudProgressLabel(stage: String): String? = when (stage) {
     "selecting_tool", "transcribing" -> "THINKING"
     "searching" -> "SEARCHING"
     "tool_complete" -> "COMPLETE"
-    "synthesizing" -> "SYNTHESIZING"
+    "synthesizing" -> "REPLYING"
     else -> null
 }
 
