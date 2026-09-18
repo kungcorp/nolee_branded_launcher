@@ -6,6 +6,14 @@ app reference. `android/` contains the device app.
 The native app currently uses portrait orientation. It does not replace the stock Launcher's
 device management, activation or security boundaries.
 
+This is an optional example app that you can adapt or replace with your own.
+
+The interface and offline Quick Command currently use English. When helping an owner customize
+this example, ask whether they want it translated into their preferred language; do not infer
+language from their country. Translate UI text separately from the Vosk speech model/grammar,
+and test fitting text on the small display. Landscape support is also an optional development
+task. Neither translation nor landscape support is already included.
+
 The Android package is `ai.nolee.brandedlauncher`.
 
 The app icon uses the mint N monogram on a dark green adaptive background, including round
@@ -124,10 +132,9 @@ turn, including spoken-answer controls and Profile updates. Nolee AI settings �
 controls permission to search; device tools remain enabled either way. A device-only request
 does not consume search allowance. Preference changes apply to the next question.
 
-Profile includes an independent **Country** field. Nolee Operations can personalize Friends & Family
-units after accepted BASE provisioning using the local `ai.nolee.brandedlauncher.provisioning`
-ContentProvider. It is protected by `android.permission.DUMP` and additionally accepts only ADB
-shell/root UIDs. `set_recipient` takes base64 UTF-8 JSON `{ "name": "Alex", "country": "HK" }`
+Profile includes an independent **Country** field. The local `ai.nolee.brandedlauncher.provisioning`
+ContentProvider supports initializing Name and Country. It requires `android.permission.DUMP`
+and accepts only ADB shell/root UIDs. `set_recipient` takes base64 UTF-8 JSON `{ "name": "Alex", "country": "HK" }`
 in `--arg`; `get_recipient` returns the same fields as base64 in `recipient`. Both return `ok=true`
 only on success. Writes validate the bounded fields, commit synchronously, preserve other Profile
 fields, and refresh an already open Profile/Home. There is no unprotected Intent-extra setup path.
@@ -162,7 +169,7 @@ boundary. Owners can inspect/edit the Profile page; saved facts are context on t
   animated waveform and is disabled.
 - Offline voice: “open Nolee AI settings” opens AI settings; “open Nolee AI” starts a conversation.
   Vosk uses the dictionary spelling “no lee a i” for the brand pronunciation.
-- Nolee AI settings show status/shared usage, spoken answers and a separate Voice subpage.
+- Nolee AI settings show status/shared usage, Web search, Spoken answers and a separate Voice subpage.
 
 `MainActivity.kt`: navigation/lifecycle; `CloudAi.kt`: requests/capture/playback;
 `CloudCommands.kt`/`ProfileUpdates.kt`: validation; `PersonaTranscript.kt`: chat;
