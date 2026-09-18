@@ -33,6 +33,14 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
+internal fun cloudProgressLabel(stage: String): String? = when (stage) {
+    "selecting_tool", "transcribing" -> "THINKING"
+    "searching" -> "SEARCHING"
+    "tool_complete" -> "COMPLETE"
+    "synthesizing" -> "SYNTHESIZING"
+    else -> null
+}
+
 enum class CloudAiPhase { LOADING, READY, RECORDING, THINKING, SPEAKING, ERROR }
 
 data class CloudAiTurn(
@@ -48,6 +56,7 @@ internal fun recentCloudHistory(turns: List<CloudAiTurn>) =
 data class CloudAiState(
     val phase: CloudAiPhase = CloudAiPhase.LOADING,
     val message: String = "",
+    val progressLabel: String = "THINKING",
     val answer: String = "",
     val turns: List<CloudAiTurn> = emptyList(),
     val requestsRemaining: Int? = null,
@@ -288,7 +297,7 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
             }
             speech?.enqueue(bytes)
         }
-        emit(lastStatus.copy(phase = CloudAiPhase.THINKING, message = "Asking Nolee AI…",
+        emit(lastStatus.copy(phase = CloudAiPhase.THINKING, progressLabel = "THINKING", message = "Asking Nolee AI…",
             answer = "", turns = turnsNow()))
         try {
             val web = webSearch(context)
@@ -338,6 +347,11 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
                     if (line.startsWith("event:")) { event = line.removePrefix("event:").trim(); continue }
                     if (!line.startsWith("data:")) continue
                     val chunk = JSONObject(line.removePrefix("data:").trim())
+                    if (event == "status") {
+                        cloudProgressLabel(chunk.optString("stage"))?.let { label ->
+                            emit(lastStatus.copy(progressLabel = label, message = label))
+                        }
+                    }
                     if (event == "device.tool_call") {
                         if (statusRead || chunk.getString("name") != "get_device_status") throw IOException("Unsupported device status request")
                         statusRead = true

@@ -199,7 +199,8 @@ boundary. Owners can inspect/edit the Profile page; saved facts are context on t
 - Long-touch camera lid to toggle transcript; Back closes it. Opening fades
   over 600 ms and closing over 500 ms, retaining content through exit.
 - Swipe persona left/right for views, up for top, down for front.
-- Speaker and status labels match the transcript body size. Transcript text streams and smoothly follows. Manual scrolling pauses follow until a new turn
+- Backend progress uses THINKING, SEARCHING, COMPLETE and SYNTHESIZING labels.
+- Speaker and status labels match the transcript body size. Transcript text streams and smoothly follows; existing answers appear immediately when reopened. Manual scrolling pauses follow until a new turn
   or reopening. AI can show/hide transcript and mute/enable its own replies.
 - With spoken answers off, entering AI automatically opens the transcript. Its fixed Ask
   button starts another microphone window without closing the transcript; during an answer,

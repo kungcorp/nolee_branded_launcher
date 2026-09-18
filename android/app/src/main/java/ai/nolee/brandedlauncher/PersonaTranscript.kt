@@ -69,7 +69,9 @@ internal fun PersonaTranscript(stage: Stage, entries: List<PersonaTranscriptEntr
                             BasicText(entry.speaker,style=body.copy(color=Palette.Mint))
                             Spacer(Modifier.height(stage.dp(5f)))
                             if(entry.speaker=="NOLEE" && index==entries.lastIndex) {
-                                var shown by remember { mutableStateOf("") }
+                                // Existing text is already history when this row mounts (including reopening).
+                                // Animate only new streamed characters, never replay the saved answer.
+                                var shown by remember { mutableStateOf(entry.text) }
                                 LaunchedEffect(entry.text) {
                                     if(!entry.text.startsWith(shown))shown=""
                                     while(shown.length<entry.text.length) {

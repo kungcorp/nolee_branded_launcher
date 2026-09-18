@@ -59,6 +59,7 @@ class BallPersonaView(context: Context): View(context) {
     private var ribbonPhase=0f
     private val listeningFont by lazy { Typeface.create(mono,Typeface.BOLD) }
     private var speaking=0f
+    private var progressLabel="THINKING"
     private var thinkingLabel=0f
     private var thinking=0f
     private var thinkingCenter=0f
@@ -191,8 +192,9 @@ class BallPersonaView(context: Context): View(context) {
         set(value){field=value;lastFrame=0L;if(value)invalidate()}
     init {setWillNotDraw(false);importantForAccessibility=IMPORTANT_FOR_ACCESSIBILITY_NO}
 
-    fun update(stage:Stage,seconds:Float,startedAt:LocalDateTime,emotion:PersonaEmotion,listening:Boolean,returning:Boolean,cameraYaw:Float,cameraPitch:Float){
+    fun update(stage:Stage,seconds:Float,startedAt:LocalDateTime,emotion:PersonaEmotion,listening:Boolean,returning:Boolean,cameraYaw:Float,cameraPitch:Float,progressLabel:String="THINKING"){
         if(returning && !this.returning){returnFrom=elapsed.coerceAtLeast(.001f);sampleDigits(LocalDateTime.now())}
+        this.progressLabel=progressLabel
         this.returning=returning
         this.cameraYaw=cameraYaw
         this.cameraPitch=cameraPitch
@@ -302,12 +304,13 @@ class BallPersonaView(context: Context): View(context) {
             c.save();c.translate(lerp(44f,Design.WIDTH-44f,labelSide),Design.HEIGHT/2+30f);c.rotate(-90f)
             fill(Color.WHITE,.34f*labelAlpha);ink.typeface=listeningFont;ink.textSize=52f
             ink.setShadowLayer(24f,0f,0f,Color.argb((.30f*labelAlpha*255).toInt(),255,255,255))
-            val word=if(thinkingLabel>listeningAlpha)"THINKING" else "LISTENING";val spacing=-2f
-            var x=-(ink.measureText("LISTENING")+spacing*("LISTENING".length-1))/2f
+            val isProgress=thinkingLabel>listeningAlpha
+            val word=if(isProgress)progressLabel else "LISTENING";val spacing=-2f
+            var x=-(ink.measureText(word)+spacing*(word.length-1))/2f
             val baseline=-(ink.ascent()+ink.descent())/2f
             for((i,ch) in word.withIndex()){
                 val glyph=ch.toString()
-                val reveal=if(word=="THINKING")1f else smooth((listeningReveal-i*.045f)/.07f)
+                val reveal=if(isProgress)1f else smooth((listeningReveal-i*.045f)/.07f)
                 ink.alpha=(255*.34f*labelAlpha*reveal).toInt()
                 if(reveal>0f)c.drawText(glyph,x,baseline,ink)
                 x+=ink.measureText(glyph)+spacing

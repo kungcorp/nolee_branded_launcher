@@ -131,6 +131,7 @@ class MainActivity : ComponentActivity() {
     private var personaActive by mutableStateOf(false)
     private val personaSeconds = mutableFloatStateOf(0f)
     private var personaStartedAt by mutableStateOf(LocalDateTime.now())
+    private var personaProgressLabel by mutableStateOf("THINKING")
     private var personaEmotion by mutableStateOf(PersonaEmotion.Regular)
     private var personaMotion: Job? = null
     private var personaListening by mutableStateOf(false)
@@ -348,7 +349,7 @@ class MainActivity : ComponentActivity() {
                 }
                 // Keep this outside PageSwitch: committing the hold must not recreate the native view.
                 if (personaActive && (page == Page.Watch || page == Page.Persona)) {
-                    PersonaScreen(stage, personaSeconds.floatValue, personaStartedAt, personaEmotion, personaListening, personaReturning, personaCameraView, personaCameraRevision, exitProgress = { kioskExitProgress.value }) { personaCameraView = it }
+                    PersonaScreen(stage, personaSeconds.floatValue, personaStartedAt, personaEmotion, personaListening, personaReturning, personaCameraView, personaCameraRevision, exitProgress = { kioskExitProgress.value }, progressLabel = personaProgressLabel) { personaCameraView = it }
                 }
                 if (page != Page.Persona && !personaActive) {
                     Box(Modifier.fillMaxSize().graphicsLayer { alpha = chromeAlpha }) {
@@ -674,6 +675,7 @@ class MainActivity : ComponentActivity() {
 
     private fun onCloudState(state: CloudAiState) {
         if (page != Page.Persona || personaReturning) return
+        personaProgressLabel = state.progressLabel
         personaListening = state.phase == CloudAiPhase.RECORDING
         personaEmotion = when (state.phase) {
             CloudAiPhase.THINKING -> PersonaEmotion.Thinking
@@ -682,7 +684,7 @@ class MainActivity : ComponentActivity() {
         }
         personaPartial = when (state.phase) {
             CloudAiPhase.RECORDING -> "Listening…"
-            CloudAiPhase.THINKING -> if (state.turns.lastOrNull()?.question.isNullOrBlank()) "Transcribing…" else ""
+            CloudAiPhase.THINKING -> state.progressLabel
             else -> ""
         }
         personaTranscript.clear()
