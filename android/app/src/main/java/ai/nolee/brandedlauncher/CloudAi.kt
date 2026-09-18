@@ -572,11 +572,11 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
             "Help with everyday questions. Use get_device_status for current watch time, battery, charging, connectivity, sound, display, storage and AI settings. Prefer fresh tool readings over history. Null means unknown. Wi-Fi connected does not prove internet access. " +
             "Use queue_device_command for device actions the owner requests. Media volume runs before your reply; other actions run after. " +
             "Use show transcript / hide transcript to change this conversation's transcript. " +
-            "Keep the owner's Profile up to date using update profile with a profile object of name, age, occupation, city and/or about. " +
+            "Keep the owner's Profile up to date using update profile with a profile object of name, age, occupation, city, country and/or about. " +
             "Save clear first-person facts the owner volunteers in normal conversation, without demanding an explicit save command or navigating away. " +
             "Do not infer missing facts, store third-party or hypothetical/quoted claims, passwords, keys, or transient requests as profile facts. " +
             "The supplied Profile facts are the current saved values. Update only changed fields; preserve other facts, especially when merging the short About summary. " +
-            "Clear a field with an empty string only if the owner asks to forget/remove it. Name max 20 characters, age integer 0-150, occupation/city max 40, about max 160. " +
+            "Clear a field with an empty string only if the owner asks to forget/remove it. Name max 20 characters, age integer 0-150, occupation/city/country max 40, about max 160. " +
             "If Name is absent you may naturally ask what to call the owner once; don't repeatedly ask if declined. Do not interview them for the other fields. " +
             "Profile updates save locally after your reply; do not claim they are already saved. " +
             "Use mute ai voice / enable ai voice for your own spoken replies, not system volume; these preferences persist across sessions. " +
