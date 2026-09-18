@@ -31,6 +31,13 @@ class Pcm16GainTest {
         org.junit.Assert.assertFalse(pcm16HasSpeech(ByteArray(16_000 * 2 * 8)))
     }
 
+    @Test fun isolatedLoudClickIsNotSpeech() {
+        val pcm = ByteArray(16_000 * 2)
+        pcm[100] = 0xff.toByte()
+        pcm[101] = 0x7f
+        org.junit.Assert.assertFalse(pcm16HasSpeech(pcm))
+    }
+
     @Test fun aShortBurstInALongTimeoutIsSpeech() {
         val pcm = ByteArray(16_000 * 2 * 8)
         var i = 16_000 * 2

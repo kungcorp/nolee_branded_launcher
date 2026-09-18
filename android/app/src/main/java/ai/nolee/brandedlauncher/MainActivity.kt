@@ -1066,6 +1066,8 @@ class MainActivity : ComponentActivity() {
             is VoiceCommand.AiVolume -> {
                 val stream = SoundStream.Media.stream
                 device.setStream(stream, (command.percent * device.streamMax(stream) + 50) / 100)
+                val expected = (command.percent * device.streamMax(stream) + 50) / 100
+                check(device.streamLevel(stream) == expected) { "Media volume did not change" }
                 device.savedLevels = null
             }
             VoiceCommand.StartAi -> if (page != Page.Persona) {

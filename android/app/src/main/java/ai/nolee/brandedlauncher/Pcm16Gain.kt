@@ -58,13 +58,11 @@ internal fun pcm16HasSpeech(pcm: ByteArray, sampleRate: Int = 16_000): Boolean {
     val window = (sampleRate / 5).coerceAtLeast(1)
     var acc = 0L
     var n = 0
-    var peak = 0
     var i = 0
     while (i + 1 < pcm.size) {
         val sample = kotlin.math.abs(
             ((pcm[i + 1].toInt() shl 8) or (pcm[i].toInt() and 0xff)).toShort().toInt(),
         )
-        if (sample > peak) peak = sample
         acc += sample
         n++
         if (n >= window) {
@@ -74,11 +72,11 @@ internal fun pcm16HasSpeech(pcm: ByteArray, sampleRate: Int = 16_000): Boolean {
         }
         i += 2
     }
-    return (n > 0 && acc / n >= SPEECH_WINDOW) || peak >= SPEECH_PEAK
+    // An isolated click used to count as speech regardless of the window's energy.
+    return n >= sampleRate / 20 && acc / n >= SPEECH_WINDOW
 }
 
 private const val SPEECH_WINDOW = 600
-private const val SPEECH_PEAK = 2_000
 
 private fun ascii(bytes: ByteArray, offset: Int, count: Int) =
     String(bytes, offset, count, Charsets.US_ASCII)
