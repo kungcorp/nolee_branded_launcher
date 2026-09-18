@@ -629,6 +629,12 @@ class MainActivity : ComponentActivity() {
                     voiceFlow?.cancel()
                     voiceFlow = lifecycleScope.launch {
                         try {
+                            if (VoiceCommand.ExitKiosk in commands) {
+                                // This is a terminal action, not an animated tour of the app's screens.
+                                stopPersonaListening()
+                                perform(VoiceCommand.ExitKiosk)
+                                return@launch
+                            }
                             // Save conversation updates while the persona is still alive, even in a mixed batch.
                             commands.filterNot { it.needsDeviceNavigation() }.forEach { perform(it) }
                             val navigating = commands.filter { it.needsDeviceNavigation() }

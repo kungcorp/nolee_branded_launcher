@@ -4,6 +4,15 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class CloudCommandsTest {
+    @Test fun exactKioskExitCannotBecomeAnAcknowledgementOnly() {
+        for (question in listOf("Exit kiosk.", "leave kiosk")) {
+            assertEquals(listOf(VoiceCommand.ExitKiosk), CloudCommands.completedTurnActions(question, emptyList()))
+            assertEquals(listOf(VoiceCommand.ExitKiosk), CloudCommands.completedTurnActions(question, listOf(VoiceCommand.ExitKiosk)))
+        }
+        for (question in listOf("Don't exit kiosk", "What does exit kiosk mean?", "Earlier I said leave kiosk")) {
+            assertEquals(emptyList<VoiceCommand>(), CloudCommands.completedTurnActions(question, emptyList()))
+        }
+    }
     @Test fun kioskExitAndAiVolumeAreBoundedTools() {
         for (name in listOf("exit kiosk", "leave kiosk")) {
             assertEquals(VoiceCommand.ExitKiosk, CloudCommands.resolve(name, null))

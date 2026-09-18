@@ -262,7 +262,8 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
         fun finishTurn() {
             main.postDelayed({
                 if (live && turn == generation.get()) {
-                    val commands = pendingCommands.getAndSet(emptyList())
+                    val commands = CloudCommands.completedTurnActions(question.get(), pendingCommands.getAndSet(emptyList()))
+                    if (BuildConfig.DEBUG) android.util.Log.i("NoleeAiCommands", "Completed turn $turn: ${commands.map { it.javaClass.simpleName }}")
                     if (commands.isNotEmpty()) onCommands(commands)
                     else startHold(FOLLOW_UP_LISTEN_MS)
                 }

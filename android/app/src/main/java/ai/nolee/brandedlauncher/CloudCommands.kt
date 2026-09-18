@@ -19,6 +19,12 @@ object CloudCommands {
     }
     val names: List<String> get() = commands.keys.toList() + "update profile"
 
+    /** Exact current-turn commands must not depend on a model remembering to call a tool.
+     * Only used after successful response/playback completion; never match history or substrings. */
+    fun completedTurnActions(question: String, actions: List<VoiceCommand>): List<VoiceCommand> =
+        if (VoiceGrammar.parse(question) == VoiceCommand.ExitKiosk) listOf(VoiceCommand.ExitKiosk)
+        else actions
+
     fun resolve(name: String, percent: Int?, profile: Map<String, String>? = null): VoiceCommand? {
         if (name == "update profile") return if (percent == null && profile != null)
             ProfileUpdates.parse(profile)?.let(VoiceCommand::UpdateProfile) else null
