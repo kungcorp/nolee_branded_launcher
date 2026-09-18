@@ -377,7 +377,10 @@ class MainActivity : ComponentActivity() {
                 SideEffect { transcriptLayerVisible=page==Page.Persona && (personaTranscriptOpen || transcriptAlpha>.001f) }
                 if(page==Page.Persona && (personaTranscriptOpen || transcriptAlpha>.001f)){
                     Box(Modifier.fillMaxSize().graphicsLayer { alpha=transcriptAlpha }){
-                        PersonaTranscript(stage,personaTranscript,personaPartial,personaListening)
+                        PersonaTranscript(stage,personaTranscript,personaPartial,personaListening,
+                            busy=personaEmotion!=PersonaEmotion.Regular,
+                            enabled=personaTranscriptOpen && !personaReturning,
+                            onListen={ restartPersonaListening() })
                     }
                 }
             }
@@ -418,6 +421,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
+        profile.close()
         debugVoice?.let { runCatching { unregisterReceiver(it) } }
         voice.destroy()
         lid.destroy()
@@ -595,6 +599,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun restartPersonaListening() {
+        if (page != Page.Persona || personaReturning) return
+        personaIdleReturn?.cancel()
         personaPartial=""
         cloudAi?.cancel()
         personaListening = false
@@ -695,6 +701,7 @@ class MainActivity : ComponentActivity() {
         getSystemService(Vibrator::class.java)?.vibrate(VibrationEffect.createWaveform(
             longArrayOf(0, 65, 35, 95), intArrayOf(0, 255, 0, 235), -1))
         go(Page.Persona)
+        personaTranscriptOpen = !CloudAi.spokenAnswers(this)
     }
 
     private fun reversePersona() {
@@ -1060,7 +1067,13 @@ class MainActivity : ComponentActivity() {
                 personaTranscriptOpen = command.on
                 personaIdleReturn?.cancel()
             }
-            is VoiceCommand.SpokenAnswers -> CloudAi.setSpokenAnswers(this,command.on)
+            is VoiceCommand.SpokenAnswers -> {
+                CloudAi.setSpokenAnswers(this,command.on)
+                if (!command.on && page == Page.Persona) {
+                    personaTranscriptOpen = true
+                    personaIdleReturn?.cancel()
+                }
+            }
             is VoiceCommand.Open -> when (val target = command.page) {
                 Page.Home -> home()
                 Page.Watch -> openFromHome(AppEntry.Watch)
@@ -1072,6 +1085,7 @@ class MainActivity : ComponentActivity() {
                     openCard(vitalsDrum) { go(target) }
                 }
                 Page.System -> openFromHome(AppEntry.System)
+                Page.NoleeAi -> openFromHome(AppEntry.NoleeAi)
                 else -> openSystem(SystemEntry.entries.first { it.page == target })
             }
             is VoiceCommand.Launch -> openFromHome(command.entry)

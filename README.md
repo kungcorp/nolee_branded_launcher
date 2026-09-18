@@ -8,6 +8,9 @@ device management, activation or security boundaries.
 
 The Android package is `ai.nolee.brandedlauncher`.
 
+The app icon uses the mint N monogram on a dark green adaptive background, including round
+launcher masks. Its artwork is in `android/app/src/main/res/drawable-nodpi/nolee_icon_n.png`.
+
 ## Build
 
 Use JDK 17, Android SDK 35/platform tools and Python 3.10+. Set `ANDROID_HOME` or
@@ -116,6 +119,20 @@ revoked/quota errors rather than trying to bypass them.
 
 ## Local tools and Profile
 
+Web search is allowed by default. The AI can select search and device commands together in one
+turn, including spoken-answer controls and Profile updates. Nolee AI settings → Web search only
+controls permission to search; device tools remain enabled either way. A device-only request
+does not consume search allowance. Preference changes apply to the next question.
+
+Profile includes an independent **Country** field. Nolee Operations can personalize Friends & Family
+units after accepted BASE provisioning using the local `ai.nolee.brandedlauncher.provisioning`
+ContentProvider. It is protected by `android.permission.DUMP` and additionally accepts only ADB
+shell/root UIDs. `set_recipient` takes base64 UTF-8 JSON `{ "name": "Alex", "country": "HK" }`
+in `--arg`; `get_recipient` returns the same fields as base64 in `recipient`. Both return `ok=true`
+only on success. Writes validate the bounded fields, commit synchronously, preserve other Profile
+fields, and refresh an already open Profile/Home. There is no unprotected Intent-extra setup path.
+Nonempty Country is included with the other profile facts in AI requests.
+
 [CloudCommands.kt](android/app/src/main/java/ai/nolee/brandedlauncher/CloudCommands.kt) declares
 bounded local actions. The server validates up to three `device.actions`; the app validates again
 and executes after a successful response/playback. Errors/cancellation discard queued actions.
@@ -134,11 +151,17 @@ boundary. Owners can inspect/edit the Profile page; saved facts are context on t
 - Short side button: Home/Watch or Persona → Watch. Long press/System → Shutdown: Power page,
   where Restart/Shut down still require slide confirmation.
 - Hold the ball to interrupt/listen with haptics; early release/movement cancels the hold.
-- Long-touch camera lid to toggle transcript; tap transcript or Back to close. Opening fades
+- Long-touch camera lid to toggle transcript; Back closes it. Opening fades
   over 600 ms and closing over 500 ms, retaining content through exit.
 - Swipe persona left/right for views, up for top, down for front.
 - Transcript text streams and smoothly follows. Manual scrolling pauses follow until a new turn
   or reopening. AI can show/hide transcript and mute/enable its own replies.
+- With spoken answers off, entering AI automatically opens the transcript. Its fixed Ask
+  button starts another microphone window without closing the transcript; during an answer,
+  Interrupt cancels the current turn and starts listening. While recording, the pill shows an
+  animated waveform and is disabled.
+- Offline voice: “open Nolee AI settings” opens AI settings; “open Nolee AI” starts a conversation.
+  Vosk uses the dictionary spelling “no lee a i” for the brand pronunciation.
 - Nolee AI settings show status/shared usage, spoken answers and a separate Voice subpage.
 
 `MainActivity.kt`: navigation/lifecycle; `CloudAi.kt`: requests/capture/playback;

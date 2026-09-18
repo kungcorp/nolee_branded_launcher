@@ -4,6 +4,13 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class ProfileUpdatesTest {
+    @Test fun countryIsAnIndependentBoundedProfileField() {
+        assertEquals(mapOf(ProfileField.Name to "Alex", ProfileField.Country to "HK"),
+            ProfileUpdates.parse(mapOf("name" to "Alex", "country" to "HK")))
+        assertNull(ProfileUpdates.parse(mapOf("country" to "x".repeat(41))))
+        assertNull(ProfileUpdates.parse(mapOf("country" to "Hong\nKong")))
+        assertEquals(VoiceCommand.EditProfile(ProfileField.Country), VoiceGrammar.parse("edit my country"))
+    }
     @Test fun parsesBatchedFieldsWithoutNavigation() {
         val command = CloudCommands.resolve("update profile", null, mapOf("name" to " Alex ", "age" to "32", "city" to "Hong Kong"))
         assertEquals(VoiceCommand.UpdateProfile(mapOf(ProfileField.Name to "Alex", ProfileField.Age to "32", ProfileField.City to "Hong Kong")), command)

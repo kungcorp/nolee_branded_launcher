@@ -37,6 +37,7 @@ enum class ProfileField(val label: String, val hint: String, val max: Int, val g
     Age("Age", "In years.", 3, Glyph.Time, numeric = true),
     Occupation("Occupation", "What you do.", 40, Glyph.Work),
     City("City", "Where you are based.", 40, Glyph.Pin),
+    Country("Country", "Your country or region.", 40, Glyph.Pin),
     About("About", "Anything else worth knowing about you.", 160, Glyph.Note, multiline = true),
 }
 
@@ -48,6 +49,16 @@ enum class ProfileField(val label: String, val hint: String, val max: Int, val g
 class Profile(context: Context) {
     private val prefs = context.getSharedPreferences("profile", Context.MODE_PRIVATE)
     private val values = ProfileField.entries.associateWith { mutableStateOf(prefs.getString(it.name, null).orEmpty()) }
+
+    // Provisioning can update the profile while Home is already open.
+    private val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        ProfileField.entries.firstOrNull { it.name == key }?.let { field ->
+            values.getValue(field).value = prefs.getString(field.name, null).orEmpty()
+        }
+    }
+    init { prefs.registerOnSharedPreferenceChangeListener(listener) }
+
+    fun close() { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
 
     operator fun get(field: ProfileField): String = values.getValue(field).value
 

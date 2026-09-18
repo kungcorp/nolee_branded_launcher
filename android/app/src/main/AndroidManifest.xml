@@ -32,8 +32,16 @@
 
     <application
         android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="Nolee Branded Launcher"
         android:theme="@style/Theme.BrandedLauncher">
+
+        <provider
+            android:name=".ProvisioningProvider"
+            android:authorities="ai.nolee.brandedlauncher.provisioning"
+            android:exported="true"
+            android:permission="android.permission.DUMP" />
 
         <!-- Portrait until the landscape layout is ported. HOME is required before the Nolee Launcher
              accepts this as the kiosk primary app. -->

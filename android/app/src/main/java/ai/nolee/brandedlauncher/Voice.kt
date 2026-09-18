@@ -302,6 +302,11 @@ object VoiceGrammar {
     private val startAiPhrases = listOf("a i", "cloud a i", "no lee a i").flatMap { name ->
         listOf("open $name", "start $name", "turn on $name")
     }
+    private fun settingsPhrases(names: List<String>) = names.flatMap { name ->
+        listOf("$name settings", "open $name settings", "go to $name settings", "show $name settings")
+    }
+    private val aiSettingsPhrases = settingsPhrases(listOf("a i", "cloud a i", "no lee a i"))
+    private val typedAiSettingsPhrases = settingsPhrases(listOf("ai", "nolee ai", "cloud ai"))
     private val pages = linkedMapOf(
         "home" to Page.Home, "home screen" to Page.Home,
         "watch" to Page.Watch, "watch face" to Page.Watch, "clock face" to Page.Watch,
@@ -334,12 +339,14 @@ object VoiceGrammar {
         Page.Pressure -> "BLOOD PRESSURE"
         Page.Wifi -> "WI-FI"
         Page.DateTime -> "DATE AND TIME"
+        Page.NoleeAi -> "NOLEE AI SETTINGS"
         else -> page.name.uppercase()
     }
 
     val phrases: List<String> by lazy {
         buildSet {
             addAll(startAiPhrases)
+            addAll(aiSettingsPhrases)
             pages.keys.forEach { name ->
                 add(name); add("open $name"); add("go to $name"); add("show $name")
             }
@@ -385,6 +392,7 @@ object VoiceGrammar {
         val text = raw.lowercase().replace(Regex("[^a-z0-9 ]"), " ").split(' ')
             .filter { it.isNotBlank() && it != "unk" }.joinToString(" ")
         if (text.isBlank()) return null
+        if (text in aiSettingsPhrases || text in typedAiSettingsPhrases) return VoiceCommand.Open(Page.NoleeAi)
         if (text in startAiPhrases || text in listOf("open nolee ai", "start nolee ai", "turn on nolee ai", "open ai", "start ai")) return VoiceCommand.StartAi
         val words = text.split(' ')
         fun has(phrase: String) = " $text ".contains(" $phrase ")

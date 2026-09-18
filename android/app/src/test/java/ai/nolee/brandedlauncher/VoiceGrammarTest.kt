@@ -8,6 +8,21 @@ import org.junit.Test
 
 class VoiceGrammarTest {
     @Test
+    fun aiSettingsAreDistinctFromStartingAConversation() {
+        for (name in listOf("a i", "cloud a i", "no lee a i")) {
+            for (prefix in listOf("", "open ", "go to ", "show ")) {
+                val phrase = "$prefix$name settings"
+                assertTrue(phrase, phrase in VoiceGrammar.phrases)
+                assertEquals(phrase, VoiceCommand.Open(Page.NoleeAi), VoiceGrammar.parse(phrase))
+            }
+            assertEquals(VoiceCommand.StartAi, VoiceGrammar.parse("open $name"))
+        }
+        assertEquals(VoiceCommand.Open(Page.NoleeAi), VoiceGrammar.parse("Open Nolee AI settings!"))
+        assertEquals(VoiceCommand.Open(Page.NoleeAi), VoiceGrammar.parse("open ai settings"))
+        assertEquals(VoiceCommand.Open(Page.System), VoiceGrammar.parse("open settings"))
+    }
+
+    @Test
     fun everyRecognisablePhraseRunsSomething() {
         val dead = VoiceGrammar.phrases.filter { it != "[unk]" && VoiceGrammar.parse(it) == null }
         assertEquals("phrases Vosk can hear but nothing runs: $dead", emptyList<String>(), dead)

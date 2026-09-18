@@ -13,6 +13,7 @@ fun CloudAiPage(stage: Stage, openVoice: () -> Unit, start: () -> Unit) {
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
     var spoken by remember { mutableStateOf(CloudAi.spokenAnswers(context)) }
+    var web by remember { mutableStateOf(CloudAi.webSearch(context)) }
     val voice = CloudAi.voice(context)
     fun refresh() {
         loading = true
@@ -55,6 +56,11 @@ fun CloudAiPage(stage: Stage, openVoice: () -> Unit, start: () -> Unit) {
         SettingRow(stage, "Refresh status & usage", value = if (loading) "…" else "↻",
             onClick = if (loading) null else ({ refresh() }))
         SectionLabel(stage, "ANSWERS")
+        ToggleRow(stage, "Web search", null, web) {
+            web = !web
+            CloudAi.setWebSearch(context, web)
+        }
+        Notice(stage, "Allow AI to search the web when needed. Device commands, spoken-answer controls and profile updates work with search on or off.")
         ToggleRow(stage, "Spoken answers", null, spoken) {
             spoken = !spoken
             CloudAi.setSpokenAnswers(context, spoken)

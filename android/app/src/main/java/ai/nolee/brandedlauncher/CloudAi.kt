@@ -289,9 +289,10 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
         emit(lastStatus.copy(phase = CloudAiPhase.THINKING, message = "Asking Nolee AI…",
             answer = "", turns = turnsNow()))
         try {
+            val web = webSearch(context)
             val payload = JSONObject()
                 .put("audio_enabled", spoken)
-                .put("web_enabled", false)
+                .put("web_enabled", web)
                 .put("tools_enabled", true)
                 .put("device_commands", JSONArray(CloudCommands.names))
                 .put("return_transcript", true)
@@ -545,6 +546,13 @@ class CloudAi(private val context: Context, private val profileFacts: () -> List
 
         fun spokenAnswers(c: Context): Boolean =
             c.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean("spoken_answers", true)
+
+        fun webSearch(c: Context): Boolean =
+            c.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean("web_search", true)
+
+        fun setWebSearch(c: Context, on: Boolean) {
+            c.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putBoolean("web_search", on).apply()
+        }
 
         fun setSpokenAnswers(c: Context, on: Boolean) {
             c.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putBoolean("spoken_answers", on).apply()
